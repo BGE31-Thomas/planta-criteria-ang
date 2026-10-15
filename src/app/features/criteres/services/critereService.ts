@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, shareReplay, map } from 'rxjs';
 import { CritereUpdEdit } from '../models/critereUpdEdit';
 import { ICritereUpdEdit } from '../models/ICritereUpdEdit';
+import { toSlug } from '../../../utils/SlugUtils';
 
 @Service()
 export class CritereService {
@@ -25,8 +26,8 @@ export class CritereService {
         );
     }
     
-    get(id: number,slug:string): Observable<CritereUpdEdit> {
-        return this.http.get<ICritereUpdEdit>(this.GET_ALL_URL + id + '/'+ slug,{
+    get(critere: CritereUpdEdit): Observable<CritereUpdEdit> {
+        return this.http.get<ICritereUpdEdit>(this.GET_ALL_URL + '/' + critere.id + '/'+ toSlug(critere.description),{
             headers: { Authorization: `Bearer ${this.token}` }
         }).pipe(
             shareReplay(1),
@@ -43,7 +44,7 @@ export class CritereService {
     }
 
     update(critere: CritereUpdEdit): Observable<CritereUpdEdit> {
-        const route = this.GET_ALL_URL + critere.id + '/' + critere.slug;
+        const route = this.GET_ALL_URL + '/' + critere.id + '/' + toSlug(critere.description);
         
         return this.http.put<ICritereUpdEdit>(route, critere.toJson(),{
             headers: { Authorization: `Bearer ${this.token}` }

@@ -25,8 +25,8 @@ export class SerieService {
         );
     }
     
-    get(id: number,slug:string): Observable<SerieUpdEdit> {
-        return this.http.get<ISerieUpdEdit>(this.GET_ALL_URL + '/' +id + '/'+ slug,{
+    get(serie: SerieUpdEdit): Observable<SerieUpdEdit> {
+        return this.http.get<ISerieUpdEdit>(this.GET_ALL_URL + '/' + serie.id + '/'+ serie.slug,{
             headers: { Authorization: `Bearer ${this.token}` }
         }).pipe(
             shareReplay(1),

@@ -6,6 +6,7 @@ import { Plant } from '../models/Plant';
 import { IPlant } from '../models/IPlant';
 import { PlantSearch } from '../models/PlantSearch';
 import { IPlantSearch } from '../models/IPlantSearch';
+import { toSlug } from '../../../utils/SlugUtils';
 
 @Service()
 export class PlantService {
@@ -26,8 +27,8 @@ export class PlantService {
         );
     }
     
-    get(id: number,slug:string): Observable<Plant> {
-        return this.http.get<IPlant>(this.GET_ALL_URL + id + '/'+ slug,{
+    get(plante: PlantSearch): Observable<Plant> {
+        return this.http.get<IPlant>(this.GET_ALL_URL + '/' + plante.id + '/'+ toSlug(plante.lbNom),{
             headers: { Authorization: `Bearer ${this.token}` }
         }).pipe(
             shareReplay(1),

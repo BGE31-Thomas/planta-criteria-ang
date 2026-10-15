@@ -1,3 +1,4 @@
+import { toSlug } from "../../../utils/SlugUtils";
 import { ISource } from "./ISource";
 
 export class Source {
@@ -14,7 +15,7 @@ export class Source {
         copy.titre = this.titre;
         copy.auteur = this.auteur;
         copy.annee = this.annee;
-        copy.slug = this.slug;
+        copy.slug = toSlug(this.titre);
 
         return copy;
     }
@@ -26,7 +27,7 @@ export class Source {
         source.titre = data.titre;
         source.auteur = data.auteur;
         source.annee = data.annee;
-        source.slug = data.slug;
+        source.slug = toSlug(data.titre);
 
         return source;
     }

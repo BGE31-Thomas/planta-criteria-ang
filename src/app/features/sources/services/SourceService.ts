@@ -24,8 +24,8 @@ export class SourceService {
         );
     }
     
-    get(id: number,slug:string): Observable<Source> {
-        return this.http.get<ISource>(this.GET_ALL_URL + '/' + id + '/'+ slug,{
+    get(source: Source): Observable<Source> {
+        return this.http.get<ISource>(this.GET_ALL_URL + '/' + source.id + '/'+ source.slug,{
             headers: { Authorization: `Bearer ${this.token}` }
         }).pipe(
             shareReplay(1),

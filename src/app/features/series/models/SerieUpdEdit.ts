@@ -1,3 +1,4 @@
+import { toSlug } from "../../../utils/SlugUtils";
 import { ISerieUpdEdit } from "./ISerieUpdEdit";
 
 
@@ -17,12 +18,11 @@ export class SerieUpdEdit implements ISerieUpdEdit {
         copy.lieu = this.lieu;
         copy.date = this.date ? new Date(this.date.getTime()) : new Date();
         copy.user_id = this.user_id;
-        copy.slug = this.slug;
+        copy.slug = toSlug(this.intitule);
 
         return copy;
     }
 
-    /** Création depuis un JSON brut (avec reconversion des objets internes et dates) */
     static fromJson(data: ISerieUpdEdit): SerieUpdEdit {
         const serie = new SerieUpdEdit();
 
@@ -31,7 +31,7 @@ export class SerieUpdEdit implements ISerieUpdEdit {
         serie.lieu = data.lieu;
         serie.date = data.date ? new Date(data.date.getTime()) : new Date();
         serie.user_id = data.user_id;
-        serie.slug = data.slug;
+        serie.slug = toSlug(data.intitule);
 
         return serie;
     }

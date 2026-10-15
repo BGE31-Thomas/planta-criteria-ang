@@ -1,3 +1,4 @@
+import { toSlug } from '../../../utils/SlugUtils';
 import { ICritereUpdEdit } from './ICritereUpdEdit';
 
 export class CritereUpdEdit implements ICritereUpdEdit {
@@ -15,6 +16,7 @@ export class CritereUpdEdit implements ICritereUpdEdit {
       copy.id = this.id;
       copy.organe = this.organe;
       copy.description = this.description;
+      copy.slug = toSlug(this.description);
       copy.source_id = this.source_id;
       copy.plante_id = this.plante_id;
 
@@ -27,6 +29,7 @@ export class CritereUpdEdit implements ICritereUpdEdit {
       critereUpdEdit.id = data.id;
       critereUpdEdit.organe = data.organe;
       critereUpdEdit.description = data.description;
+      critereUpdEdit.slug = toSlug(data.description);
       critereUpdEdit.source_id = data.source_id;
       critereUpdEdit.plante_id = data.plante_id;
 
