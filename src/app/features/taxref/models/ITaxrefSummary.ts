@@ -1,4 +1,4 @@
-export interface TaxrefSummary {
+export interface ITaxrefSummary {
   id: number;
   nom: string;
   lbNom: string;

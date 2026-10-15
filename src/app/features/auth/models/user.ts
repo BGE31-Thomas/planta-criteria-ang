@@ -1,7 +1,7 @@
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  password: string;
-  verified: boolean;
+export class User {
+  id: number = 0;
+  username: string = '';
+  email: string = '';
+  password: string = '';
+  verified: boolean = false;
 }

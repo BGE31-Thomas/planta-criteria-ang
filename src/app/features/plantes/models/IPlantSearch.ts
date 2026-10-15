@@ -1,4 +1,4 @@
-export interface PlantSearch {
+export interface IPlantSearch {
     id: number;
     lbNom: string;
 }

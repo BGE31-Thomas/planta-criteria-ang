@@ -3,4 +3,5 @@ export interface ObservationCritereUpdEdit {
     observation_id: number;
     critere_id: number;
     statut_id: number;
+    slug: string;
 }
