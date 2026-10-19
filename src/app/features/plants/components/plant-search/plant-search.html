@@ -1,0 +1,61 @@
+<div class="plant-search-container">
+
+  <mat-form-field appearance="outline" class="plant-search-field">
+
+    <mat-label>Rechercher une plante</mat-label>
+
+    <mat-icon matPrefix>search</mat-icon>
+
+    <input
+      matInput
+      type="text"
+      [formControl]="searchControl"
+      [matAutocomplete]="auto"
+      placeholder="Ex. : Carex halleriana"
+      autocomplete="off"
+    />
+
+    @if (loading()) {
+      <mat-spinner
+        matSuffix
+        diameter="22"
+        aria-label="Recherche en cours"
+      />
+    }
+
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="displayPlant"
+      (optionSelected)="selectPlant($event)"
+      autoActiveFirstOption
+    >
+
+      @for (plant of suggestions(); track plant.id) {
+        <mat-option [value]="plant">
+          <span [innerHTML]="plant.nomCompletHtml"></span>
+        
+        </mat-option>
+      }
+
+      @if (
+        !loading() &&
+        suggestions().length === 0 &&
+        (searchControl.value?.toString()?.trim()?.length ?? 0) >= 2 &&
+        !error()
+      ) {
+        <mat-option disabled>
+          Aucune plante trouvée
+        </mat-option>
+      }
+
+    </mat-autocomplete>
+
+    @if (error()) {
+      <mat-hint class="search-error">
+        {{ error() }}
+      </mat-hint>
+    }
+
+  </mat-form-field>
+
+</div>

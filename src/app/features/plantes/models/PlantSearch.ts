@@ -1,14 +1,17 @@
+import { toSlug } from "../../../utils/SlugUtils";
 import { IPlantSearch } from "./IPlantSearch";
 
 export class PlantSearch {
     id: number = 0;
-    lbNom: string = '';
+    nomCompletHtml: string = '';
+    slug: string = '';
 
      copy(): PlantSearch {
             const copy = new PlantSearch();
     
             copy.id = this.id;
-            copy.lbNom = this.lbNom;
+            copy.nomCompletHtml = this.nomCompletHtml;
+            copy.slug = toSlug(this.nomCompletHtml);
         
             return copy;
         }
@@ -17,7 +20,8 @@ export class PlantSearch {
             const plant = new PlantSearch();
     
             plant.id = data.id;
-            plant.lbNom = data.lbNom;
+            plant.nomCompletHtml = data.nomCompletHtml;
+            plant.slug = toSlug(data.nomCompletHtml);
 
             return plant;
         }

@@ -14,7 +14,7 @@ export class SerieService {
 
     getAllbyUser(user: User): Observable<ISerieUpdEdit[]> {
         return this.http.post<ISerieUpdEdit[]>(this.GET_ALL_URL,user,{
-            headers: { Authorization: `Bearer ${this.token}` }
+            
         }).pipe(
             shareReplay(1),
             map(seriesJsonArray => {
@@ -27,7 +27,7 @@ export class SerieService {
     
     get(serie: SerieUpdEdit): Observable<SerieUpdEdit> {
         return this.http.get<ISerieUpdEdit>(this.GET_ALL_URL + '/' + serie.id + '/'+ serie.slug,{
-            headers: { Authorization: `Bearer ${this.token}` }
+            
         }).pipe(
             shareReplay(1),
             map(serieJson => SerieUpdEdit.fromJson(serieJson))
@@ -36,7 +36,7 @@ export class SerieService {
 
     add(serie: SerieUpdEdit): Observable<SerieUpdEdit> {
         return this.http.post<ISerieUpdEdit>(this.GET_ALL_URL, serie.toJson(),{
-            headers: { Authorization: `Bearer ${this.token}` }
+            
         }).pipe(
             map(serieJson => SerieUpdEdit.fromJson(serieJson))
         );
@@ -46,7 +46,7 @@ export class SerieService {
         const route = this.GET_ALL_URL + '/' + serie.id + '/' + serie.slug;
         
         return this.http.put<ISerieUpdEdit>(route, serie.toJson(),{
-            headers: { Authorization: `Bearer ${this.token}` }
+            
         }).pipe(
             map(serieJson => SerieUpdEdit.fromJson(serieJson))
         );

@@ -13,9 +13,7 @@ export class CommuneService {
   private token = localStorage.getItem('tk_id_token');
 
   getAllBySItes(commune:string): Observable<CommuneSearch[]> {
-    return this.http.post<ICommuneSearch[]>(this.GET_ALL_URL+commune,{
-      headers: { Authorization: `Bearer ${this.token}` }
-    }).pipe(
+    return this.http.post<ICommuneSearch[]>(this.GET_ALL_URL+commune,{}).pipe(
       shareReplay(1),
       map(communeJsonArray => {
         return communeJsonArray.map<CommuneSearch>(

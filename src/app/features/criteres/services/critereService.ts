@@ -14,9 +14,7 @@ export class CritereService {
     private token = localStorage.getItem('tk_id_token');
 
     getAllByPlant(plante_id: number): Observable<CritereUpdEdit[]> {
-        return this.http.post<ICritereUpdEdit[]>(this.GET_ALL_URL + "/" + plante_id,{
-            headers: { Authorization: `Bearer ${this.token}` }
-        }).pipe(
+        return this.http.post<ICritereUpdEdit[]>(this.GET_ALL_URL + "/" + plante_id,{}).pipe(
             shareReplay(1),
             map(criteresJsonArray => {
             return criteresJsonArray.map<CritereUpdEdit>(
@@ -27,28 +25,22 @@ export class CritereService {
     }
     
     get(critere: CritereUpdEdit): Observable<CritereUpdEdit> {
-        return this.http.get<ICritereUpdEdit>(this.GET_ALL_URL + '/' + critere.id + '/'+ toSlug(critere.description),{
-            headers: { Authorization: `Bearer ${this.token}` }
-        }).pipe(
+        return this.http.get<ICritereUpdEdit>(this.GET_ALL_URL + '/' + critere.id + '/'+ critere.slug,{}).pipe(
             shareReplay(1),
             map(critereJson => CritereUpdEdit.fromJson(critereJson))
         );
     }
 
     add(critere: CritereUpdEdit): Observable<CritereUpdEdit> {
-        return this.http.post<ICritereUpdEdit>(this.GET_ALL_URL, critere.toJson(),{
-            headers: { Authorization: `Bearer ${this.token}` }
-        }).pipe(
+        return this.http.post<ICritereUpdEdit>(this.GET_ALL_URL, critere.toJson(),{}).pipe(
             map(critereJson => CritereUpdEdit.fromJson(critereJson))
         );
     }
 
     update(critere: CritereUpdEdit): Observable<CritereUpdEdit> {
-        const route = this.GET_ALL_URL + '/' + critere.id + '/' + toSlug(critere.description);
+        const route = this.GET_ALL_URL + '/' + critere.id + '/' + critere.slug;
         
-        return this.http.put<ICritereUpdEdit>(route, critere.toJson(),{
-            headers: { Authorization: `Bearer ${this.token}` }
-        }).pipe(
+        return this.http.put<ICritereUpdEdit>(route, critere.toJson(),{}).pipe(
             map(critereJson => CritereUpdEdit.fromJson(critereJson))
         );
     }

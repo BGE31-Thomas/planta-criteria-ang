@@ -16,11 +16,6 @@ export class ImageService {
       formData.append('file', file);
       formData.append('reserve', JSON.stringify(critere)); 
 
-      return this.http.post(this.apiUrl, formData, {
-        headers: {
-          Authorization: `Bearer ${this.token}`
-
-        }
-      });
+      return this.http.post(this.apiUrl, formData, {});
     }
 }    

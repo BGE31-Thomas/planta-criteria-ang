@@ -13,7 +13,7 @@ export class SourceService {
 
     getAll(): Observable<Source[]> {
         return this.http.post<ISource[]>(this.GET_ALL_URL,{
-            headers: { Authorization: `Bearer ${this.token}` }
+            
         }).pipe(
             shareReplay(1),
             map(sourcesJsonArray => {
@@ -26,7 +26,7 @@ export class SourceService {
     
     get(source: Source): Observable<Source> {
         return this.http.get<ISource>(this.GET_ALL_URL + '/' + source.id + '/'+ source.slug,{
-            headers: { Authorization: `Bearer ${this.token}` }
+            
         }).pipe(
             shareReplay(1),
             map(sourceJson => Source.fromJson(sourceJson))
@@ -35,7 +35,7 @@ export class SourceService {
 
     add(source: Source): Observable<Source> {
         return this.http.post<ISource>(this.GET_ALL_URL, source.toJson(),{
-            headers: { Authorization: `Bearer ${this.token}` }
+            
         }).pipe(
             map(sourceJson => Source.fromJson(sourceJson))
         );
@@ -45,7 +45,7 @@ export class SourceService {
         const route = this.GET_ALL_URL + '/' + source.id + '/' + source.slug;
         
         return this.http.put<ISource>(route, source.toJson(),{
-            headers: { Authorization: `Bearer ${this.token}` }
+            
         }).pipe(
             map(sourceJson => Source.fromJson(sourceJson))
         );

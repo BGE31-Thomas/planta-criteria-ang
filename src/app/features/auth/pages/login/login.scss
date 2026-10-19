@@ -1,0 +1,44 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 70vh;
+  padding: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 16px;
+}
+
+mat-card-header {
+  margin-bottom: 24px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.login-button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+}
+
+.login-button mat-spinner {
+  display: inline-block;
+}
+
+.error-message {
+  color: var(--mat-sys-error, #b3261e);
+  font-size: 14px;
+  margin: 0;
+}

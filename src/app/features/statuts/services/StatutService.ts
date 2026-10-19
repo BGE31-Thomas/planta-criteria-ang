@@ -14,7 +14,7 @@ export class StatutService {
 
     getAll(): Observable<Statut[]> {
         return this.http.post<IStatut[]>(this.GET_ALL_URL,{
-            headers: { Authorization: `Bearer ${this.token}` }
+            
         }).pipe(
             shareReplay(1),
             map(sstatutsJsonArray => {
