@@ -10,5 +10,6 @@ export interface IPlant {
     famille: string;
     synonymes: TaxrefSummary[];
     criteres: CritereUpdEdit[];
+    slug: string;
   
 }

@@ -1,4 +1,4 @@
-import { ICommuneSearch } from "./ICommuneSearch";
+import { ICommuneSearch } from "../interfaces/ICommuneSearch";
 
 export class CommuneSearch implements ICommuneSearch {
     id: number = 0;

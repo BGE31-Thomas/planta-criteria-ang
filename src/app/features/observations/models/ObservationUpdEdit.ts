@@ -1,4 +1,4 @@
-import { ICritereUpdEdit } from "../../criteres/models/ICritereUpdEdit";
+import { ICritereUpdEdit } from "../../criteres/interfaces/ICritereUpdEdit";
 import { IObservationUpdEdit } from "./IObservationUpdEdit";
 
 export class ObservationUpdEdit implements IObservationUpdEdit {

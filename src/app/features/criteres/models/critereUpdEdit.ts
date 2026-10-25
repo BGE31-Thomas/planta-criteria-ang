@@ -1,5 +1,5 @@
 import { toSlug } from '../../../utils/SlugUtils';
-import { ICritereUpdEdit } from './ICritereUpdEdit';
+import { ICritereUpdEdit } from '../interfaces/ICritereUpdEdit';
 
 export class CritereUpdEdit implements ICritereUpdEdit {
   id: number = 0;

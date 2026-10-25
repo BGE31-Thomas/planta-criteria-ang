@@ -1,1 +1,209 @@
-<p>plant-detail works!</p>
+<main class="plant-page">
+
+  <!-- Chargement -->
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="48" />
+
+      <p>Chargement de la fiche botanique...</p>
+    </div>
+  }
+
+  <!-- Erreur -->
+  @if (!loading() && error()) {
+    <mat-card appearance="outlined" class="error-card">
+
+      <mat-card-content>
+        <mat-icon color="warn">error_outline</mat-icon>
+
+        <p>{{ error() }}</p>
+
+        <button
+          type="button"
+          mat-button
+          routerLink="/plants/search"
+        >
+          <mat-icon>arrow_back</mat-icon>
+          Retour à la recherche
+        </button>
+      </mat-card-content>
+
+    </mat-card>
+  }
+
+  <!-- Fiche de la plante -->
+  @if (!loading() && plant(); as p) {
+
+    <!-- En-tête -->
+    <header class="plant-header">
+
+      <button
+        type="button"
+        mat-button
+        routerLink="/plants/search"
+      >
+        <mat-icon>arrow_back</mat-icon>
+        Retour à la recherche
+      </button>
+
+      <mat-card appearance="outlined" class="plant-main-card">
+
+        <mat-card-content>
+
+          <div class="plant-title">
+
+            <mat-icon class="plant-icon">
+              eco
+            </mat-icon>
+
+            <div>
+              <h1 [innerHTML]="p.nomCompletHtml"></h1>
+
+            </div>
+
+          </div>
+
+        </mat-card-content>
+
+      </mat-card>
+
+    </header>
+
+    <!-- Informations botaniques -->
+    <section class="plant-section">
+      <button
+        mat-flat-button
+        type="button"
+        (click)="pdfExporter.exportPdf()"
+      >
+        <mat-icon>picture_as_pdf</mat-icon>
+        Exporter en PDF
+      </button>
+
+      <app-plant-pdf-export
+        class="hidden"
+        #pdfExporter
+        [plant]="p"
+        [criteres]="criteres()"
+      />
+       
+      <h2>
+        <mat-icon>info</mat-icon>
+        Informations botaniques
+      </h2>
+
+      <mat-card appearance="outlined">
+
+        <mat-card-content>
+
+          @if (p.famille) {
+            <div class="info-row">
+              <span class="info-label">Famille botanique</span>
+              <span>{{ p.famille }}</span>
+            </div>
+          }
+
+        </mat-card-content>
+
+      </mat-card>
+
+    </section>
+
+    <!-- Synonymes -->
+    @if (p.synonymes?.length) {
+
+      <section class="plant-section">
+
+        <h2>
+          <mat-icon>format_list_bulleted</mat-icon>
+          Synonymes
+        </h2>
+
+        <mat-card appearance="outlined">
+
+          <mat-card-content>
+
+            <mat-chip-set aria-label="Synonymes botaniques">
+
+              @for (synonyme of p.synonymes; track synonyme.id) {
+                <mat-chip>
+                  {{ synonyme.nom }}
+                </mat-chip>
+              }
+
+            </mat-chip-set>
+
+          </mat-card-content>
+
+        </mat-card>
+
+      </section>
+
+    }
+
+    <!-- Critères de détermination -->
+    @if (criteres().length) {
+
+      <section class="plant-section">
+
+        <h2>
+          <mat-icon>fact_check</mat-icon>
+          Critères de détermination
+        </h2>
+
+        @for (groupe of criteresParSource(); track groupe.source) {
+
+          <div class="critere-source">
+
+            <!-- Nom de la source -->
+            <h3 class="source-title">
+              {{ groupe.source }}
+            </h3>
+
+            <!-- Tableau des critères de cette source -->
+            <table
+              mat-table
+              [dataSource]="groupe.criteres"
+              class="mat-elevation-z2 criteres-table"
+            >
+
+              <!-- Colonne Organe -->
+              <ng-container matColumnDef="organe">
+                <th mat-header-cell *matHeaderCellDef>
+                  Organe
+                </th>
+
+                <td mat-cell *matCellDef="let critere">
+                  {{ critere.organe }}
+                </td>
+              </ng-container>
+
+              <!-- Colonne Description -->
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>
+                  Description
+                </th>
+
+                <td mat-cell *matCellDef="let critere">
+                  {{ critere.description }}
+                </td>
+              </ng-container>
+
+              <!-- En-têtes et lignes -->
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+            </table>
+
+          </div>
+
+        }
+
+      </section>
+
+    }
+
+  }
+
+</main>

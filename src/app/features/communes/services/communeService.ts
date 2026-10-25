@@ -2,7 +2,7 @@ import { Observable, map, shareReplay } from 'rxjs';
 import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { ICommuneSearch } from '../models/ICommuneSearch';
+import { ICommuneSearch } from '../interfaces/ICommuneSearch';
 import { CommuneSearch } from '../models/CommuneSearch';
 
 @Service()

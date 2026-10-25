@@ -3,22 +3,23 @@ import { environment } from '../../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable, shareReplay, map } from 'rxjs';
 import { CritereUpdEdit } from '../models/critereUpdEdit';
-import { ICritereUpdEdit } from '../models/ICritereUpdEdit';
-import { toSlug } from '../../../utils/SlugUtils';
+import { ICritereUpdEdit } from '../interfaces/ICritereUpdEdit';
+import { Plant } from '../../plantes/models/Plant';
+import { Critere } from '../models/critere';
+import { ICritere } from '../interfaces/ICritere';
 
 @Service()
 export class CritereService {
 
     private GET_ALL_URL = environment.java_server+'/api/criteres';
     private http = inject(HttpClient);
-    private token = localStorage.getItem('tk_id_token');
 
-    getAllByPlant(plante_id: number): Observable<CritereUpdEdit[]> {
-        return this.http.post<ICritereUpdEdit[]>(this.GET_ALL_URL + "/" + plante_id,{}).pipe(
+    getAllByPlant(plante: Plant): Observable<Critere[]> {
+        return this.http.get<ICritere[]>(this.GET_ALL_URL + "/plante/" + plante.id + '/' + plante.slug,{}).pipe(
             shareReplay(1),
             map(criteresJsonArray => {
-            return criteresJsonArray.map<CritereUpdEdit>(
-                critereJson => CritereUpdEdit.fromJson(critereJson)
+            return criteresJsonArray.map<Critere>(
+                critereJson => Critere.fromJson(critereJson)
             )
             })
         );

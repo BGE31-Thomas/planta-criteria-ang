@@ -3,9 +3,9 @@ import { inject, Service } from '@angular/core';
 import { Observable, shareReplay, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';;
 import { Plant } from '../models/Plant';
-import { IPlant } from '../models/IPlant';
+import { IPlant } from '../interfaces/IPlant';
 import { PlantSearch } from '../models/PlantSearch';
-import { IPlantSearch } from '../models/IPlantSearch';
+import { IPlantSearch } from '../interfaces/IPlantSearch';
 
 @Service()
 export class PlantService {

@@ -1,5 +1,5 @@
 import { toSlug } from "../../../utils/SlugUtils";
-import { IPlantSearch } from "./IPlantSearch";
+import { IPlantSearch } from "../interfaces/IPlantSearch";
 
 export class PlantSearch {
     id: number = 0;

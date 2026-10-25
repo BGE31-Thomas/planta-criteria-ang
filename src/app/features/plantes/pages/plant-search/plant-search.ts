@@ -22,8 +22,8 @@ import {
 } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { PlantSearch } from '../../../plantes/models/PlantSearch';
-import { PlantService } from '../../../plantes/services/PlantService';
+import { PlantSearch } from '../../models/PlantSearch';
+import { PlantService } from '../../services/PlantService';
 
 
 
