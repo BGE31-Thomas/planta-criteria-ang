@@ -52,10 +52,6 @@
 
           <div class="plant-title">
 
-            <mat-icon class="plant-icon">
-              eco
-            </mat-icon>
-
             <div>
               <h1 [innerHTML]="p.nomCompletHtml"></h1>
 
@@ -74,18 +70,11 @@
       <button
         mat-flat-button
         type="button"
-        (click)="pdfExporter.exportPdf()"
+        (click)="exportPdf()"
       >
         <mat-icon>picture_as_pdf</mat-icon>
         Exporter en PDF
       </button>
-
-      <app-plant-pdf-export
-        class="hidden"
-        #pdfExporter
-        [plant]="p"
-        [criteres]="criteres()"
-      />
        
       <h2>
         <mat-icon>info</mat-icon>
@@ -110,7 +99,7 @@
     </section>
 
     <!-- Synonymes -->
-    @if (p.synonymes?.length) {
+    @if (p.synonymes?.length;) {
 
       <section class="plant-section">
 
@@ -125,7 +114,7 @@
 
             <mat-chip-set aria-label="Synonymes botaniques">
 
-              @for (synonyme of p.synonymes; track synonyme.id) {
+              @for (synonyme of synonymesTries(); track synonyme) {
                 <mat-chip>
                   {{ synonyme.nom }}
                 </mat-chip>

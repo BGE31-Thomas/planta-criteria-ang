@@ -84,21 +84,14 @@
           </p>
         }
 
-        <button
-          mat-flat-button
-          type="submit"
-          class="login-button"
-          [disabled]="loading()"
-        >
-
-          @if (loading()) {
-            <mat-spinner diameter="20" />
-          } @else {
-            <mat-icon>login</mat-icon>
-            Se connecter
-          }
-
+       
+        <button mat-flat-button type="submit" [disabled]="loading()">
+          <mat-icon>{{ loading() ? 'hourglass_empty' : 'login' }}</mat-icon>
+          <span>
+            {{ loading() ? 'Connexion en cours...' : 'Se connecter' }}
+          </span>
         </button>
+
 
       </form>
 
