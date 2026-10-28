@@ -23,5 +23,12 @@ export const routes: Routes = [
             import('./features/plantes/pages/plant-detail/plant-detail')
                 .then(m => m.PlantDetailComponent)
     },
+    {
+        path: 'criteres/:id/:slug',
+        canActivate: [authGuard],
+        loadComponent: () =>
+            import('./features/criteres/pages/critere-create/critere-create')
+                .then(m => m.CritereCreate)
+    },
   
 ];

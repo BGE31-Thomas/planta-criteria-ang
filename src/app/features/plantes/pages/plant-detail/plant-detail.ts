@@ -33,7 +33,8 @@ import { MatTableModule } from '@angular/material/table';
 import { Critere } from '../../../criteres/models/critere';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { PlantSearch } from '../../models/PlantSearch';
+import { CritereCreate } from '../../../criteres/pages/critere-create/critere-create';
+import { CritereUpdEdit } from '../../../criteres/models/critereUpdEdit';
 
 @Component({
   selector: 'app-plant-detail',
@@ -48,6 +49,7 @@ import { PlantSearch } from '../../models/PlantSearch';
     MatExpansionModule,
     RouterLink,
     MatTableModule,
+    CritereCreate
   ],
   templateUrl: './plant-detail.html',
   styleUrl: './plant-detail.scss'
@@ -62,6 +64,7 @@ export class PlantDetailComponent implements OnInit {
   readonly plant = signal<Plant | null>(null);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
+  readonly criteria = signal<Critere>(new Critere);
 
   criteres = signal<Critere[]>([]);
 
@@ -90,7 +93,20 @@ export class PlantDetailComponent implements OnInit {
     )
   );
 
-  displayedColumns: string[] = ['organe', 'description'];
+  displayedColumns: string[] = ['organe', 'description', 'action'];
+
+  readonly formulaireCritereOuvert = signal(false);
+  readonly formulaireCritereEditOuvert = signal(false);
+
+  ouvrirFormulaireCritere(critere: Critere): void {
+    this.criteria.set(critere);
+    this.formulaireCritereOuvert.set(true);
+
+  }
+
+  fermerFormulaireCritere(): void {
+    this.formulaireCritereOuvert.set(false);
+  }
 
   ngOnInit(): void {
 
@@ -510,6 +526,28 @@ export class PlantDetailComponent implements OnInit {
       .replace(/^_+|_+$/g, '');
 
     doc.save(`fiche_${filename || plant.id}.pdf`);
+  }
+
+  rechargerCriteres(): void {
+    const plant = this.plant();
+
+    if (!plant) {
+      return;
+    }
+
+    this.critereService.getAllByPlant(plant).subscribe({
+      next: criteres => {
+        this.criteres.set(criteres);
+        this.formulaireCritereOuvert.set(false);
+      },
+      error: () => {
+        this.error.set(
+          'Le critère a été créé, mais la liste des critères n’a pas pu être actualisée.'
+        );
+
+        this.formulaireCritereOuvert.set(false);
+      }
+    });
   }
   
 }

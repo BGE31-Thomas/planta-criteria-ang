@@ -1,1 +1,205 @@
-<p>critere-create works!</p>
+<section class="critere-form-card">
+
+  <header class="form-header">
+    <div>
+      <h2>Ajouter un critère</h2>
+      <p>Plante : <strong>{{ plant().nom }}</strong></p>
+    </div>
+
+    <button
+      mat-icon-button
+      type="button"
+      aria-label="Fermer le formulaire"
+      (click)="annuler.emit()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  @if (erreur()) {
+    <div class="error-message" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      {{ erreur() }}
+    </div>
+  }
+
+  @if (!creationSource()) {
+
+    <form
+      [formGroup]="formulaire"
+      (ngSubmit)="enregistrerCritere()"
+    >
+
+      <mat-form-field appearance="outline">
+        <mat-label>Organe</mat-label>
+
+        <input
+          matInput
+          formControlName="organe"
+          placeholder="Ex. Feuille, fleur, fruit..."
+        />
+
+        @if (formulaire.controls.organe.hasError('required')
+          && formulaire.controls.organe.touched) {
+          <mat-error>L'organe est obligatoire.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description du critère</mat-label>
+
+        <textarea
+          matInput
+          formControlName="description"
+          rows="4"
+          placeholder="Décrivez le caractère botanique..."
+        ></textarea>
+
+        @if (formulaire.controls.description.hasError('required')
+          && formulaire.controls.description.touched) {
+          <mat-error>La description est obligatoire.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="source-header">
+        <h3>Source bibliographique</h3>
+
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="afficherCreationSource()"
+        >
+          <mat-icon>add</mat-icon>
+          Nouvelle source
+        </button>
+      </div>
+
+      @if (chargementSources()) {
+        <div class="loading-sources">
+          <mat-spinner diameter="24"></mat-spinner>
+          <span>Chargement des sources...</span>
+        </div>
+      } @else {
+
+        <mat-form-field appearance="outline">
+          <mat-label>Source</mat-label>
+
+          <mat-select formControlName="source_id">
+
+            @for (source of sources(); track source.id) {
+              <mat-option [value]="source.id">
+                {{ source.titre }}
+                @if (source.auteur) {
+                  — {{ source.auteur }}
+                }
+                @if (source.annee) {
+                  ({{ source.annee }})
+                }
+              </mat-option>
+            }
+
+          </mat-select>
+
+          @if (formulaire.controls.source_id.hasError('required')
+            && formulaire.controls.source_id.touched) {
+            <mat-error>Veuillez choisir une source.</mat-error>
+          }
+        </mat-form-field>
+
+        @if (sources().length === 0) {
+          <p class="hint">
+            Aucune source disponible. Créez-en une pour continuer.
+          </p>
+        }
+      }
+
+      <footer class="form-actions">
+        <button mat-raised-button type="submit" color = "primary" [disabled]="formulaire.invalid || enregistrement()">
+          <mat-icon>{{ enregistrement() ? 'hourglass_empty' : 'save' }}</mat-icon>
+          <span>
+            {{ enregistrement() ? 'Enregistrement...' : 'Créer le critère' }}
+          </span>
+        </button>
+      </footer>
+
+    </form>
+
+  } @else {
+
+    <form
+      [formGroup]="formulaireSource"
+      (ngSubmit)="enregistrerSource()"
+    >
+
+      <h3>Créer une nouvelle source</h3>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Titre de la source</mat-label>
+
+        <input
+          matInput
+          formControlName="titre"
+          placeholder="Titre de l'ouvrage ou de la publication"
+        />
+
+        @if (formulaireSource.controls.titre.hasError('required')
+          && formulaireSource.controls.titre.touched) {
+          <mat-error>Le titre est obligatoire.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Auteur</mat-label>
+
+        <input
+          matInput
+          formControlName="auteur"
+          placeholder="Nom de l'auteur"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Année de publication</mat-label>
+
+        <input
+          matInput
+          type="number"
+          formControlName="annee"
+          min="1900"
+          max="9999"
+          placeholder="Ex. 2024"
+        />
+
+        @if (formulaireSource.controls.annee.hasError('min')
+          || formulaireSource.controls.annee.hasError('max')) {
+          <mat-error>
+            L'année doit être comprise entre 1900 et 9999.
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <footer class="form-actions">
+
+        <button
+          mat-button
+          type="button"
+          (click)="annulerCreationSource()"
+          [disabled]="enregistrement()"
+        >
+          Retour
+        </button>
+
+        <button mat-flat-button type="submit" [disabled]="enregistrement()">
+          <mat-icon>{{ enregistrement() ? 'hourglass_empty' : 'add' }}</mat-icon>
+          <span>
+            {{ enregistrement() ? 'Enregistrement...' : 'Créer la source' }}
+          </span>
+        </button>
+
+      </footer>
+
+    </form>
+
+  }
+
+</section>

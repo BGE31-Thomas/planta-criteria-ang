@@ -9,10 +9,9 @@ import { Source } from '../models/Source';
 export class SourceService {
     private GET_ALL_URL = environment.java_server+'/api/sources';
     private http = inject(HttpClient);
-    private token = localStorage.getItem('tk_id_token');
 
     getAll(): Observable<Source[]> {
-        return this.http.post<ISource[]>(this.GET_ALL_URL,{
+        return this.http.get<ISource[]>(this.GET_ALL_URL,{
             
         }).pipe(
             shareReplay(1),

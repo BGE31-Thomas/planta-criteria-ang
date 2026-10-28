@@ -5,7 +5,7 @@ export class Source {
     id: number = 0;
     titre: string = '';
     auteur: string = '';
-    annee: string = '';
+    annee: number = 1900;
     slug: string = '';
 
     copy(): Source {

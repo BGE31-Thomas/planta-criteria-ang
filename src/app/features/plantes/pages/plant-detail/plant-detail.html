@@ -87,7 +87,7 @@
 
           @if (p.famille) {
             <div class="info-row">
-              <span class="info-label">Famille botanique</span>
+              <span class="info-label">Famille</span>
               <span>{{ p.famille }}</span>
             </div>
           }
@@ -130,8 +130,10 @@
 
     }
 
+    
+
     <!-- Critères de détermination -->
-    @if (criteres().length) {
+    
 
       <section class="plant-section">
 
@@ -140,59 +142,97 @@
           Critères de détermination
         </h2>
 
-        @for (groupe of criteresParSource(); track groupe.source) {
-
-          <div class="critere-source">
-
-            <!-- Nom de la source -->
-            <h3 class="source-title">
-              {{ groupe.source }}
-            </h3>
-
-            <!-- Tableau des critères de cette source -->
-            <table
-              mat-table
-              [dataSource]="groupe.criteres"
-              class="mat-elevation-z2 criteres-table"
-            >
-
-              <!-- Colonne Organe -->
-              <ng-container matColumnDef="organe">
-                <th mat-header-cell *matHeaderCellDef>
-                  Organe
-                </th>
-
-                <td mat-cell *matCellDef="let critere">
-                  {{ critere.organe }}
-                </td>
-              </ng-container>
-
-              <!-- Colonne Description -->
-              <ng-container matColumnDef="description">
-                <th mat-header-cell *matHeaderCellDef>
-                  Description
-                </th>
-
-                <td mat-cell *matCellDef="let critere">
-                  {{ critere.description }}
-                </td>
-              </ng-container>
-
-              <!-- En-têtes et lignes -->
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-            </table>
-
-          </div>
-
+        @if (plant(); as p) {
+          <button
+            mat-flat-button
+            color="primary"
+            type="button"
+            (click)="ouvrirFormulaireCritere(criteria())"
+          >
+            <mat-icon>add</mat-icon>
+            Ajouter un critère
+          </button>
         }
 
+        @if (formulaireCritereOuvert() && plant(); as p) {
+          <app-critere-create
+            [plant]="p"
+            [criteria]="criteria()"
+            (annuler)="fermerFormulaireCritere()"
+            (critereCree)="rechargerCriteres()"
+          />
+        }
+
+        @if (criteres().length) {
+
+          @for (groupe of criteresParSource(); track groupe.source) {
+
+            <div class="critere-source">
+
+              <!-- Nom de la source -->
+              <h3 class="source-title">
+                {{ groupe.source }}
+              </h3>
+
+              <!-- Tableau des critères de cette source -->
+              <table
+                mat-table
+                [dataSource]="groupe.criteres"
+                class="mat-elevation-z2 criteres-table"
+              >
+
+                <!-- Colonne Organe -->
+                <ng-container matColumnDef="organe">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Organe
+                  </th>
+
+                  <td mat-cell *matCellDef="let critere">
+                    {{ critere.organe }}
+                  </td>
+                </ng-container>
+
+                <!-- Colonne Description -->
+                <ng-container matColumnDef="description">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Description
+                  </th>
+
+                  <td mat-cell *matCellDef="let critere">
+                    {{ critere.description }}
+                  </td>
+                </ng-container>
+
+                <!-- Colonne Description -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Action
+                  </th>
+
+                  <td mat-cell *matCellDef="let critere">
+                    <button 
+                      mat-raised-button
+                      (click)="ouvrirFormulaireCritere(critere)"
+                       >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <!-- En-têtes et lignes -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+              </table>
+
+            </div>
+
+          }
+
+        }
+        
       </section>
 
     }
-
-  }
-
 </main>
