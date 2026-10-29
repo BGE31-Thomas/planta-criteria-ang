@@ -13,6 +13,7 @@ import { SourceService } from "../../../sources/services/SourceService";
 import { CritereService } from "../../services/critereService";
 import { CritereUpdEdit } from "../../models/critereUpdEdit";
 import { Critere } from "../../models/critere";
+import { Labels } from "../../../../utils/Labels";
 
 @Component({
   selector: 'app-critere-create',
@@ -67,6 +68,12 @@ export class CritereCreate implements OnInit {
 
   critere: CritereUpdEdit = new CritereUpdEdit();
 
+  labels = new Labels();
+
+  title = "";
+
+  buttonLabel = "";
+
   readonly formulaireCritereOuvert = signal(false);
 
   ouvrirFormulaireCritere(): void {
@@ -75,11 +82,13 @@ export class CritereCreate implements OnInit {
 
   fermerFormulaireCritere(): void {
     this.formulaireCritereOuvert.set(false);
+
   }
 
   ngOnInit(): void {
     this.chargerSources();
     if (this.criteria().id > 0){
+      this.title = this.labels.critereModify;
       this.formulaire.patchValue({
         organe: this.criteria().organe,
         description: this.criteria().description,
@@ -91,6 +100,8 @@ export class CritereCreate implements OnInit {
         auteur: this.criteria().source.auteur,
         annee: this.criteria().source.annee
       })
+    }else{
+      this.title = this.labels.critereCreate;
     }
     
   }

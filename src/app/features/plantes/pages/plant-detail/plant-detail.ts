@@ -35,6 +35,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { CritereCreate } from '../../../criteres/pages/critere-create/critere-create';
 import { CritereUpdEdit } from '../../../criteres/models/critereUpdEdit';
+import { Labels } from '../../../../utils/Labels';
 
 @Component({
   selector: 'app-plant-detail',
@@ -65,6 +66,8 @@ export class PlantDetailComponent implements OnInit {
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
   readonly criteria = signal<Critere>(new Critere);
+
+  readonly labels = new Labels();
 
   criteres = signal<Critere[]>([]);
 
@@ -106,6 +109,7 @@ export class PlantDetailComponent implements OnInit {
 
   fermerFormulaireCritere(): void {
     this.formulaireCritereOuvert.set(false);
+    
   }
 
   ngOnInit(): void {
@@ -539,6 +543,7 @@ export class PlantDetailComponent implements OnInit {
       next: criteres => {
         this.criteres.set(criteres);
         this.formulaireCritereOuvert.set(false);
+        this.criteria.set(new Critere());
       },
       error: () => {
         this.error.set(

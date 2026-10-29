@@ -1,0 +1,37 @@
+export class Labels {
+    addCritere : string = "Ajouter un critère";
+    plant: string = "Plante";
+    closeForm: string = "Fermer le formulaire";
+    organeMissing: string = "Vous devez préciser l'organe.";
+    critereDescription: string = "Description du critère";
+    descriptionMissing: string = "Vous devez décrire le critère.";
+    source: string = "Source bibliographique";
+    newSource: string = "Nouvelle source";
+    sourcesLoading: string = "Chargement des sources...";
+    sourceShort: string = "Source";
+    sourceMissing: string = "Veuillez choisir une source.";
+    newSourceCreate: string = "Créer une nouvelle source";
+    sourceTitle: string = "Titre de la source";
+    titlePlaceHolder: string = "Titre de l'ouvrage ou de la publication";
+    author: string = "Auteur";
+    authorsNames: string = "Nom des auteurs";
+    sourcePublicationYear: string = "Année de publication";
+    recordingProgress: string = "Enregistrement...";
+    sourceCreate: string = "Créer la source";
+    noSource: string = "Aucune source disponible. Créez-en une pour continuer.";
+    titleMissing: string = "Le titre est obligatoire.";
+    sourceYearsRange: string = "L'année doit être comprise entre 1900 et 9999.";
+    back: string = "Retour";
+    critereCreate: string = "Créer le critère";
+    critereModify: string = "Modifier le critère"
+    pageLoading: string = "Chargement de la fiche botanique...";
+    backToResearch: string = "Retour à la recherche";
+    exportPDF: string = "Exporter en PDF";
+    information: string = "Informations botaniques";
+    synonyms: string = "Synonymes botaniques";
+    synonymsShort: string = "Synonymes";
+    criteres: string = "Critères de détermination";
+    organe: string = "Organe";
+    description: string = "Description"
+    action: string = "Action";
+}

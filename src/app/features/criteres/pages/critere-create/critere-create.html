@@ -2,14 +2,14 @@
 
   <header class="form-header">
     <div>
-      <h2>Ajouter un critère</h2>
-      <p>Plante : <strong>{{ plant().nom }}</strong></p>
+      <h2>{{title}}</h2>
+      <p>{{labels.plant}} : <strong>{{ plant().nom }}</strong></p>
     </div>
 
     <button
       mat-icon-button
       type="button"
-      aria-label="Fermer le formulaire"
+      aria-label="{{labels.closeForm}}"
       (click)="annuler.emit()"
     >
       <mat-icon>close</mat-icon>
@@ -41,12 +41,12 @@
 
         @if (formulaire.controls.organe.hasError('required')
           && formulaire.controls.organe.touched) {
-          <mat-error>L'organe est obligatoire.</mat-error>
+          <mat-error>{{labels.organeMissing}}</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Description du critère</mat-label>
+        <mat-label>{{labels.critereDescription}}</mat-label>
 
         <textarea
           matInput
@@ -57,12 +57,12 @@
 
         @if (formulaire.controls.description.hasError('required')
           && formulaire.controls.description.touched) {
-          <mat-error>La description est obligatoire.</mat-error>
+          <mat-error>{{labels.descriptionMissing}}</mat-error>
         }
       </mat-form-field>
 
       <div class="source-header">
-        <h3>Source bibliographique</h3>
+        <h3>{{labels.source}}</h3>
 
         <button
           mat-stroked-button
@@ -70,19 +70,19 @@
           (click)="afficherCreationSource()"
         >
           <mat-icon>add</mat-icon>
-          Nouvelle source
+          {{labels.sourceCreate}}
         </button>
       </div>
 
       @if (chargementSources()) {
         <div class="loading-sources">
           <mat-spinner diameter="24"></mat-spinner>
-          <span>Chargement des sources...</span>
+          <span>{{labels.sourcesLoading}}</span>
         </div>
       } @else {
 
         <mat-form-field appearance="outline">
-          <mat-label>Source</mat-label>
+          <mat-label>{{labels.sourceShort}}</mat-label>
 
           <mat-select formControlName="source_id">
 
@@ -102,7 +102,7 @@
 
           @if (formulaire.controls.source_id.hasError('required')
             && formulaire.controls.source_id.touched) {
-            <mat-error>Veuillez choisir une source.</mat-error>
+            <mat-error>{{labels.sourceMissing}}</mat-error>
           }
         </mat-form-field>
 
@@ -117,7 +117,7 @@
         <button mat-raised-button type="submit" color = "primary" [disabled]="formulaire.invalid || enregistrement()">
           <mat-icon>{{ enregistrement() ? 'hourglass_empty' : 'save' }}</mat-icon>
           <span>
-            {{ enregistrement() ? 'Enregistrement...' : 'Créer le critère' }}
+            {{ enregistrement() ? labels.recordingProgress : title }}
           </span>
         </button>
       </footer>
@@ -131,10 +131,10 @@
       (ngSubmit)="enregistrerSource()"
     >
 
-      <h3>Créer une nouvelle source</h3>
+      <h3>{{labels.newSourceCreate}}</h3>
 
       <mat-form-field appearance="outline">
-        <mat-label>Titre de la source</mat-label>
+        <mat-label>{{labels.sourceTitle}}</mat-label>
 
         <input
           matInput
@@ -144,22 +144,22 @@
 
         @if (formulaireSource.controls.titre.hasError('required')
           && formulaireSource.controls.titre.touched) {
-          <mat-error>Le titre est obligatoire.</mat-error>
+          <mat-error>{{labels.titleMissing}}</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Auteur</mat-label>
+        <mat-label>{{labels.author}}</mat-label>
 
         <input
           matInput
           formControlName="auteur"
-          placeholder="Nom de l'auteur"
+          placeholder="{{labels.authorsNames}}"
         />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Année de publication</mat-label>
+        <mat-label>{{labels.sourcePublicationYear}}</mat-label>
 
         <input
           matInput
@@ -186,13 +186,13 @@
           (click)="annulerCreationSource()"
           [disabled]="enregistrement()"
         >
-          Retour
+          {{labels.back}}
         </button>
 
         <button mat-flat-button type="submit" [disabled]="enregistrement()">
           <mat-icon>{{ enregistrement() ? 'hourglass_empty' : 'add' }}</mat-icon>
           <span>
-            {{ enregistrement() ? 'Enregistrement...' : 'Créer la source' }}
+            {{ enregistrement() ? labels.recordingProgress : labels.sourceCreate }}
           </span>
         </button>
 
