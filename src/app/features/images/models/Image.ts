@@ -1,13 +1,13 @@
 import { IImage } from "./IImage";
 
-export class Image implements IImage   {
+export class Imago implements IImage   {
   id: number = 0;
   chemin: string = '';
   auteur: string = '';
   description: string = '';
 
   copy(): IImage {
-        const copy = new Image();
+        const copy = new Imago();
   
         copy.id = this.id;
         copy.chemin = this.chemin;
@@ -18,8 +18,8 @@ export class Image implements IImage   {
     }
   
     /** Création depuis un JSON brut (avec reconversion des objets internes et dates) */
-    static fromJson(data: Image): IImage {
-        const image = new Image();
+    static fromJson(data: Imago): IImage {
+        const image = new Imago();
   
         image.id = data.id;
         image.chemin = data.chemin;

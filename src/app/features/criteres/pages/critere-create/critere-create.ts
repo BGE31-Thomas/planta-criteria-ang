@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, input, output, signal } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject, input, output, signal } from "@angular/core";
 import { ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -6,7 +6,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSelectModule } from "@angular/material/select";
-import { finalize } from "rxjs";
+import { finalize, forkJoin, of, switchMap } from "rxjs";
 import { Plant } from "../../../plantes/models/Plant";
 import { Source } from "../../../sources/models/Source";
 import { SourceService } from "../../../sources/services/SourceService";
@@ -14,6 +14,10 @@ import { CritereService } from "../../services/critereService";
 import { CritereUpdEdit } from "../../models/critereUpdEdit";
 import { Critere } from "../../models/critere";
 import { Labels } from "../../../../utils/Labels";
+import { ImageService } from "../../../images/services/imageService";
+import { environment } from "../../../../../environments/environment";
+import { IImage } from "../../../images/models/IImage";
+import { Imago } from "../../../images/models/Image";
 
 @Component({
   selector: 'app-critere-create',
@@ -30,7 +34,7 @@ import { Labels } from "../../../../utils/Labels";
   templateUrl: './critere-create.html',
   styleUrl: './critere-create.scss'
 })
-export class CritereCreate implements OnInit {
+export class CritereCreate implements OnInit, OnDestroy {
 
   private readonly fb = inject(FormBuilder);
   private readonly sourceService = inject(SourceService);
@@ -76,6 +80,30 @@ export class CritereCreate implements OnInit {
 
   readonly formulaireCritereOuvert = signal(false);
 
+    // Images sélectionnées
+  readonly imagesSelectionnees = signal<File[]>([]);
+
+  private readonly imageService = inject(ImageService);
+
+  // Aperçus des images
+  readonly apercusImages = signal<
+    { fichier: File; url: string }[]
+  >([]);
+
+  // État du glisser-déposer
+  readonly survolZoneDepot = signal(false);
+
+  // Taille maximale : 10 Mo par image
+  readonly tailleMaxImage = 10 * 1024 * 1024;
+
+  // Images déjà présentes sur le serveur
+  readonly imagesExistantes = signal<IImage[]>([]);
+
+  // URL de base du serveur
+  readonly imageBaseUrl = environment.java_server;
+
+  private readonly imageUrl = environment.java_server + '/uploads/images'
+
   ouvrirFormulaireCritere(): void {
     this.formulaireCritereOuvert.set(true);
   }
@@ -83,6 +111,117 @@ export class CritereCreate implements OnInit {
   fermerFormulaireCritere(): void {
     this.formulaireCritereOuvert.set(false);
 
+  }
+
+  selectionnerImages(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files) {
+      this.ajouterImages(Array.from(input.files));
+    }
+
+    // Permet de sélectionner à nouveau le même fichier
+    input.value = '';
+  }
+
+  gererGlisser(event: DragEvent): void {
+    event.preventDefault();
+    this.survolZoneDepot.set(true);
+  }
+
+  gererSortie(event: DragEvent): void {
+    event.preventDefault();
+    this.survolZoneDepot.set(false);
+  }
+
+  gererDepot(event: DragEvent): void {
+    event.preventDefault();
+    this.survolZoneDepot.set(false);
+
+    const fichiers = event.dataTransfer?.files;
+
+    if (fichiers) {
+      this.ajouterImages(Array.from(fichiers));
+    }
+  }
+
+  private ajouterImages(fichiers: File[]): void {
+    const imagesExistantes = this.imagesSelectionnees();
+
+    for (const fichier of fichiers) {
+      if (!fichier.type.startsWith('image/')) {
+        this.erreur.set(
+          `${fichier.name} n'est pas une image valide.`
+        );
+        continue;
+      }
+
+      if (fichier.size > this.tailleMaxImage) {
+        this.erreur.set(
+          `${fichier.name} dépasse la taille maximale de 10 Mo.`
+        );
+        continue;
+      }
+
+      // Éviter d'ajouter deux fois le même fichier
+      const dejaPresent = this.imagesSelectionnees().some(
+        image =>
+          image.name === fichier.name &&
+          image.size === fichier.size &&
+          image.lastModified === fichier.lastModified
+      );
+
+      if (dejaPresent) {
+        continue;
+      }
+
+      this.imagesSelectionnees.update(images => [
+        ...images,
+        fichier
+      ]);
+
+      this.apercusImages.update(aperçus => [
+        ...aperçus,
+        {
+          fichier,
+          url: URL.createObjectURL(fichier)
+        }
+      ]);
+    }
+  }
+
+  private envoyerImages(critereId: number) {
+    const fichiers = this.imagesSelectionnees();
+
+    if (fichiers.length === 0) {
+      return of([]);
+    }
+
+    return forkJoin(
+      fichiers.map(fichier =>
+        this.imageService.uploadPourCritere(
+          critereId,
+          fichier
+        )
+      )
+    );
+  }
+  supprimerImage(fichier: File): void {
+    const apercu = this.apercusImages().find(
+      image => image.fichier === fichier
+    );
+
+    if (apercu) {
+      URL.revokeObjectURL(apercu.url);
+    }
+
+    this.imagesSelectionnees.update(images =>
+      images.filter(image => image !== fichier)
+    );
+
+    this.apercusImages.update(aperçus =>
+      aperçus.filter(image => image.fichier !== fichier)
+    );
   }
 
   ngOnInit(): void {
@@ -99,11 +238,47 @@ export class CritereCreate implements OnInit {
         titre: this.criteria().source.titre,
         auteur: this.criteria().source.auteur,
         annee: this.criteria().source.annee
-      })
+      });
+
+      this.chargerImagesExistantes();
     }else{
       this.title = this.labels.critereCreate;
     }
     
+  }
+
+  private chargerImagesExistantes(): void {
+    this.imageService.getAllByCritere(this.criteria().id)
+      .subscribe({
+        next: images => {
+          this.imagesExistantes.set(images);
+        },
+        error: () => {
+          this.erreur.set(
+            'Impossible de récupérer les images du critère.'
+          );
+        }
+      });
+  }
+
+  supprimerImageExistante(image: IImage): void {
+    this.imageService.delete(image)
+      .subscribe({
+        next: () => {
+          this.imagesExistantes.update(images =>
+            images.filter(i => i.id !== image.id)
+          );
+        },
+        error: () => {
+          this.erreur.set(
+            'Impossible de supprimer cette image.'
+          );
+        }
+      });
+  }
+
+  getImageUrl(image: IImage): string {
+    return `${this.imageUrl}/${image.chemin}`;
   }
 
   chargerSources(): void {
@@ -170,6 +345,7 @@ export class CritereCreate implements OnInit {
 
     this.sourceService.add(this.source)
       .pipe(
+        
         finalize(() => this.enregistrement.set(false))
       )
       .subscribe({
@@ -219,6 +395,9 @@ export class CritereCreate implements OnInit {
       // Création
       this.critereService.add(this.critere)
         .pipe(
+          switchMap(critereCree =>
+            this.envoyerImages(critereCree.id)
+          ),
           finalize(() => this.enregistrement.set(false))
         )
         .subscribe({
@@ -241,6 +420,9 @@ export class CritereCreate implements OnInit {
 
       this.critereService.update(this.critere)
         .pipe(
+           switchMap(() =>
+            this.envoyerImages(this.critere.id)
+          ),
           finalize(() => this.enregistrement.set(false))
         )
         .subscribe({
@@ -256,6 +438,12 @@ export class CritereCreate implements OnInit {
           }
         });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.apercusImages().forEach(image => {
+      URL.revokeObjectURL(image.url);
+    });
   }
 
   

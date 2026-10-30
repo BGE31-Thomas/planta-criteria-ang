@@ -113,6 +113,134 @@
         }
       }
 
+      <!-- Images du critère -->
+    <section class="images-section">
+
+      <h3>Images du critère</h3>
+
+      <p class="images-description">
+        Ajoutez des photographies pour illustrer ce critère.
+        Vous pouvez déposer plusieurs images simultanément.
+      </p>
+
+      <!-- Zone de glisser-déposer -->
+      <div
+        class="zone-depot"
+        [class.zone-active]="survolZoneDepot()"
+        (dragover)="gererGlisser($event)"
+        (dragleave)="gererSortie($event)"
+        (drop)="gererDepot($event)"
+        (click)="selecteurImages.click()"
+        (keydown.enter)="selecteurImages.click()"
+        (keydown.space)="$event.preventDefault(); selecteurImages.click()"
+        tabindex="0"
+        role="button"
+        aria-label="Sélectionner ou déposer des images"
+      >
+
+        <mat-icon class="icone-depot">
+          add_photo_alternate
+        </mat-icon>
+
+        <p class="texte-depot">
+          Glissez-déposez vos images ici
+        </p>
+
+        <p class="texte-secondaire">
+          ou cliquez pour parcourir vos fichiers
+        </p>
+
+        <span class="formats-acceptes">
+          Images uniquement · 10 Mo maximum par fichier
+        </span>
+
+        <input
+          #selecteurImages
+          type="file"
+          accept="image/*"
+          multiple
+          hidden
+          (change)="selectionnerImages($event)"
+          (click)="$event.stopPropagation()"
+        />
+
+      </div>
+
+      <!-- Images déjà téléversées -->
+      @if (imagesExistantes().length > 0) {
+        <div class="images-existantes">
+
+          <h3>Images déjà téléversées</h3>
+
+          <div class="images-grid">
+            @for (image of imagesExistantes(); track image.id) {
+
+              <div class="image-item">
+
+                <img
+                  [src]="getImageUrl(image)"
+                  [alt]="image.description || 'Image du critère'"
+                >
+
+                <button
+                  mat-icon-button
+                  color="warn"
+                  type="button"
+                  (click)="supprimerImageExistante(image)"
+                  aria-label="Supprimer cette image"
+                > 
+                  <mat-icon>delete</mat-icon>
+                </button>
+
+              </div>
+
+            }
+          </div>
+
+        </div>
+      }
+
+      <!-- Nouvelles images sélectionnées -->
+      @if (apercusImages().length > 0) {
+
+        <div class="images-nouvelles">
+
+          <h3>Nouvelles images</h3>
+
+          <div class="images-grid">
+
+            @for (apercu of apercusImages(); track apercu.url) {
+
+              <div class="image-item">
+
+                <img
+                  [src]="apercu.url"
+                  [alt]="apercu.fichier.name"
+                >
+
+                <button
+                  mat-icon-button
+                  color="warn"
+                  type="button"
+                  (click)="supprimerImage(apercu.fichier)"
+                  aria-label="Retirer cette image"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+
+              </div>
+
+            }
+
+          </div>
+
+        </div>
+      }
+
+      
+
+    </section>
+
       <footer class="form-actions">
         <button mat-raised-button type="submit" color = "primary" [disabled]="formulaire.invalid || enregistrement()">
           <mat-icon>{{ enregistrement() ? 'hourglass_empty' : 'save' }}</mat-icon>

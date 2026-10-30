@@ -1,21 +1,50 @@
-import { inject, Service } from '@angular/core';
-import { environment } from '../../../../environments/environment';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CritereUpdEdit } from '../../criteres/models/critereUpdEdit';
+import { environment } from '../../../../environments/environment';
+import { IImage } from '../models/IImage';
+import { Imago } from '../models/Image';
 
-@Service()
+
+
+@Injectable({
+  providedIn: 'root'
+})
 export class ImageService {
-    private http = inject(HttpClient);
-    private token = localStorage.getItem('tk_id_token');
-    private apiUrl = environment.java_server + '/api/images/upload';
 
-    uploadFileForCriteria(file: File,critere:CritereUpdEdit): Observable<any> {
-      const formData = new FormData();
+  private readonly http = inject(HttpClient);
+
+  private readonly baseUrl = environment.java_server + '/api/images/upload/critere/';
+  private readonly imageUrl = environment.java_server + '/api/images/upload/'
   
-      formData.append('file', file);
-      formData.append('reserve', JSON.stringify(critere)); 
 
-      return this.http.post(this.apiUrl, formData, {});
-    }
-}    
+  uploadPourCritere(
+    critereId: number,
+    fichier: File
+  ): Observable<unknown> {
+
+    const formData = new FormData();
+
+    formData.append('file', fichier);
+    console.log(`${this.baseUrl}${critereId}`);
+    return this.http.post(
+      `${this.baseUrl}${critereId}`,
+      formData
+    );
+  }
+
+  getAllByCritere(critereId: number): Observable<IImage[]> {
+    return this.http.get<IImage[]>(
+      `${this.baseUrl}${critereId}`
+    );
+  }
+
+  delete(image: IImage): Observable<void> {
+    return this.http.delete<void>(
+      this.imageUrl + image.id,
+      {}
+    );
+  }
+
+ 
+}
