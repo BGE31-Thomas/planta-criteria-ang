@@ -1,0 +1,118 @@
+<div class="galerie-container">
+
+  <!-- En-tête -->
+  <div class="galerie-header">
+
+    <div>
+      <h2>Galerie d'images</h2>
+      <p>{{ data.organe }}</p>
+    </div>
+
+    <button
+      mat-icon-button
+      type="button"
+      (click)="fermer()"
+      aria-label="Fermer la galerie"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+
+  </div>
+
+  <!-- Chargement -->
+  @if (chargement()) {
+
+    <div class="galerie-loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Chargement des images...</p>
+    </div>
+
+  }
+
+  <!-- Erreur -->
+  @else if (erreur()) {
+
+    <div class="galerie-erreur">
+      <mat-icon color="warn">error_outline</mat-icon>
+      <p>{{ erreur() }}</p>
+    </div>
+
+  }
+
+  <!-- Aucune image -->
+  @else if (images().length === 0) {
+
+    <div class="galerie-vide">
+      <mat-icon>image_not_supported</mat-icon>
+      <p>Aucune image disponible pour ce critère.</p>
+    </div>
+
+  }
+
+  <!-- Galerie -->
+  @else {
+
+    <div class="galerie-contenu">
+
+      <!-- Image principale -->
+      @if (imageSelectionnee(); as image) {
+
+        <div class="image-principale">
+
+          <img
+            [src]="getImageUrl(image)"
+            [alt]="image.description || data.organe"
+          >
+
+        </div>
+
+      }
+
+      <!-- Vignettes -->
+      <div class="galerie-vignettes">
+
+        @for (image of images(); track image.id) {
+
+          <button
+            type="button"
+            class="vignette"
+            [class.active]="imageSelectionnee()?.id === image.id"
+            (click)="selectionnerImage(image)"
+            [attr.aria-label]="'Afficher l’image ' + image.id"
+          >
+
+            <img
+              [src]="getImageUrl(image)"
+              [alt]="image.description || 'Image du critère'"
+            >
+
+          </button>
+
+        }
+
+      </div>
+
+      <!-- Informations -->
+      <div class="galerie-informations">
+        {{ images().length }}
+        {{ images().length > 1 ? 'images' : 'image' }}
+      </div>
+
+    </div>
+
+  }
+
+  <!-- Pied de fenêtre -->
+  <div class="galerie-footer">
+
+    <button
+      mat-button
+      type="button"
+      (click)="fermer()"
+    >
+      Fermer
+    </button>
+
+  </div>
+
+</div>

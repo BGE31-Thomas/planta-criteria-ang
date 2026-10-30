@@ -1,4 +1,4 @@
-import { CritereUpdEdit } from "../../criteres/models/critereUpdEdit";
+import { Critere } from "../../criteres/models/critere";
 import { TaxrefSummary } from "../../taxref/models/TaxrefSummary";
 
 
@@ -9,7 +9,7 @@ export interface IPlant {
     nomCompletHtml: string;
     famille: string;
     synonymes: TaxrefSummary[];
-    criteres: CritereUpdEdit[];
+    criteres: Critere[];
     slug: string;
   
 }

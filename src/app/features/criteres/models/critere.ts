@@ -1,4 +1,6 @@
 import { toSlug } from "../../../utils/SlugUtils";
+import { IImage } from "../../images/models/IImage";
+import { Imago } from "../../images/models/Image";
 import { PlantSearch } from "../../plantes/models/PlantSearch";
 import { Source } from "../../sources/models/Source";
 import { ICritere } from "../interfaces/ICritere";
@@ -10,6 +12,7 @@ export class Critere implements ICritere {
   slug: string = '';
   source: Source = new Source();
   plante: PlantSearch = new PlantSearch();
+  images : Imago[] = []
 
 
   copy(): Critere {
@@ -21,6 +24,7 @@ export class Critere implements ICritere {
       copy.slug = toSlug(this.description);
       copy.source = this.source.copy();
       copy.plante = this.plante.copy();
+      copy.images = this.images?.map(s => s.copy()) || [];
 
       return copy;
   }
@@ -34,6 +38,7 @@ export class Critere implements ICritere {
       critere.slug = toSlug(data.description);
       critere.source = Source.fromJson(data.source);
       critere.plante = PlantSearch.fromJson(data.plante);
+      critere.images = (data.images || []).map(i => Imago.fromJson(i));
 
       return critere;
   }
@@ -43,7 +48,8 @@ export class Critere implements ICritere {
       return {
           ...this,
             source: typeof this.source.toJson === 'function' ? this.source.toJson() : this.source,
-            plante: typeof this.plante.toJson === 'function' ? this.plante.toJson() : this.plante
+            plante: typeof this.plante.toJson === 'function' ? this.plante.toJson() : this.plante,
+            images: this.images ? this.images.map(i => typeof i.toJson === 'function' ? i.toJson() : i) : []
       };
   }
 }

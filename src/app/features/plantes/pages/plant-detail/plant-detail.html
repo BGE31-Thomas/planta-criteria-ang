@@ -219,6 +219,33 @@
                   </td>
                 </ng-container>
 
+                <ng-container matColumnDef="images">
+                  
+                  <th mat-header-cell *matHeaderCellDef>
+                    Images
+                  </th>
+
+                  <td mat-cell *matCellDef="let critere">
+
+                    @if (critere.images?.length > 0) {
+
+                      <button
+                        mat-icon-button
+                        type="button"
+                        matTooltip="Voir les images"
+                        aria-label="Voir les images du critère"
+                        (click)="ouvrirGalerie(critere)"
+                      >
+                        <mat-icon>photo_library</mat-icon>
+                      </button>
+
+                    }
+
+                  </td>
+
+                  
+                </ng-container>
+
                 <!-- En-têtes et lignes -->
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 

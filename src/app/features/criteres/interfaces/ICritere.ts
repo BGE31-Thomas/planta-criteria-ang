@@ -1,3 +1,4 @@
+import { Imago } from "../../images/models/Image";
 import { PlantSearch } from "../../plantes/models/PlantSearch";
 import { Source } from "../../sources/models/Source";
 
@@ -8,4 +9,5 @@ export interface ICritere {
   slug: string;
   source: Source;
   plante: PlantSearch;
+  images: Imago[];
 }

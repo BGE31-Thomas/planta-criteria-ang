@@ -6,7 +6,7 @@ export class Imago implements IImage   {
   auteur: string = '';
   description: string = '';
 
-  copy(): IImage {
+  copy(): Imago {
         const copy = new Imago();
   
         copy.id = this.id;
@@ -18,7 +18,7 @@ export class Imago implements IImage   {
     }
   
     /** Création depuis un JSON brut (avec reconversion des objets internes et dates) */
-    static fromJson(data: Imago): IImage {
+    static fromJson(data: IImage): Imago {
         const image = new Imago();
   
         image.id = data.id;

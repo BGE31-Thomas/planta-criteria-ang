@@ -2,6 +2,7 @@ import { CritereUpdEdit } from "../../criteres/models/critereUpdEdit";
 import { TaxrefSummary } from "../../taxref/models/TaxrefSummary";
 import { IPlant } from "../interfaces/IPlant";
 import { toSlug } from "../../../utils/SlugUtils";
+import { Critere } from "../../criteres/models/critere";
 
 export class Plant {
     id: number = 0;
@@ -10,7 +11,7 @@ export class Plant {
     nomCompletHtml: string = "";
     famille: string = "";
     synonymes: TaxrefSummary[] = [];
-    criteres: CritereUpdEdit[] = [];
+    criteres: Critere[] = [];
     slug: string = "";
 
     copy(): Plant {
@@ -37,7 +38,7 @@ export class Plant {
         plant.nomCompletHtml = data.nomCompletHtml;
         plant.famille = data.famille;
         plant.synonymes = (data.synonymes || []).map(s => TaxrefSummary.fromJson(s));
-        plant.criteres = (data.criteres || []).map(c => CritereUpdEdit.fromJson(c));
+        plant.criteres = (data.criteres || []).map(c => Critere.fromJson(c));
         plant.slug = toSlug(data.nomCompletHtml);
 
 

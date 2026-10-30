@@ -34,8 +34,10 @@ import { Critere } from '../../../criteres/models/critere';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { CritereCreate } from '../../../criteres/pages/critere-create/critere-create';
-import { CritereUpdEdit } from '../../../criteres/models/critereUpdEdit';
 import { Labels } from '../../../../utils/Labels';
+import { MatDialog } from '@angular/material/dialog';
+import { CritereGalerieComponent, CritereGalerieData } from '../../../../shared/dialogs/critere-galerie/critere-galerie';
+import { CritereUpdEdit } from '../../../criteres/models/critereUpdEdit';
 
 @Component({
   selector: 'app-plant-detail',
@@ -96,10 +98,37 @@ export class PlantDetailComponent implements OnInit {
     )
   );
 
-  displayedColumns: string[] = ['organe', 'description', 'action'];
+  displayedColumns = [
+    'organe',
+    'description',
+    'action',
+    'images'
+  ];
 
   readonly formulaireCritereOuvert = signal(false);
   readonly formulaireCritereEditOuvert = signal(false);
+
+  private readonly dialog = inject(MatDialog);
+
+    ouvrirGalerie(critere: Critere): void {
+
+    this.dialog.open<
+      CritereGalerieComponent,
+      CritereGalerieData
+    >(CritereGalerieComponent, {
+
+      width: '900px',
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+
+      data: {
+        critereId: critere.id,
+        organe: critere.organe
+      }
+
+    });
+
+  }
 
   ouvrirFormulaireCritere(critere: Critere): void {
     this.criteria.set(critere);
@@ -200,6 +229,7 @@ export class PlantDetailComponent implements OnInit {
 
       if (result.criteres !== null) {
         this.criteres.set(result.criteres);
+        console.log(this.criteres());
       }
 
       this.loading.set(false);
@@ -434,6 +464,7 @@ export class PlantDetailComponent implements OnInit {
         body: groupe.criteres.map((critere: Critere) => [
           critere.organe ?? '',
           critere.description ?? ''
+        
         ]),
 
         theme: 'grid',
