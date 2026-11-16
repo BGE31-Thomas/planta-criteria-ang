@@ -2,6 +2,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { Router } from '@angular/router';
 
 export interface LoginRequest {
   email: string;
@@ -20,7 +21,10 @@ export interface AuthResponse {
 })
 export class AuthService {
 
+
   private readonly http = inject(HttpClient);
+
+  private readonly router = inject(Router);
 
   private readonly loginUrl = `${environment.java_server}/api/auth/login`;
 
@@ -41,9 +45,79 @@ export class AuthService {
 
   readonly currentUser = this.userState.asReadonly();
 
-  readonly isAuthenticated = computed(
-    () => this.tokenState() !== null
-  );
+  private expirationTimer: ReturnType<typeof setTimeout> | null = null;
+
+  startExpirationTimer(): void {
+
+    if (this.expirationTimer) {
+      clearTimeout(this.expirationTimer);
+    }
+
+    const expiration = this.getTokenExpiration();
+
+    if (!expiration) {
+      this.logout();
+      return;
+    }
+
+    const remainingTime = expiration - Date.now();
+
+    if (remainingTime <= 0) {
+      this.logout();
+      return;
+    }
+
+    this.expirationTimer = setTimeout(() => {
+      this.logout();
+    }, remainingTime);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  isAuthenticated(): boolean {
+
+    const token = this.getToken();
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      const payload = JSON.parse(
+        atob(token.split('.')[1])
+      );
+
+      const expiration = payload.exp * 1000;
+
+      return Date.now() < expiration;
+
+    } catch {
+      return false;
+    }
+  }
+
+  getTokenExpiration(): number | null {
+
+    const token = this.getToken();
+
+    if (!token) {
+      return null;
+    }
+
+    try {
+      const payload = JSON.parse(
+        atob(token.split('.')[1])
+      );
+
+      return payload.exp * 1000;
+
+    } catch {
+      return null;
+    }
+  }
+
 
   /**
    * Connexion à l'API Spring Boot.
@@ -78,6 +152,7 @@ export class AuthService {
 
     this.tokenState.set(response.token);
     this.userState.set(response);
+    this.startExpirationTimer();
   }
 
   /**
@@ -107,10 +182,20 @@ export class AuthService {
    */
   logout(): void {
 
+    if (this.expirationTimer) {
+      clearTimeout(this.expirationTimer);
+      this.expirationTimer = null;
+    }
+
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userKey);
 
     this.tokenState.set(null);
+    this.userState.set(null);
+
+    this.router.navigateByUrl('/login', {
+      replaceUrl: true
+    });
     this.userState.set(null);
   }
 }

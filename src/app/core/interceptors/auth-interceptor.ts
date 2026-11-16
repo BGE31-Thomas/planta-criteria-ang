@@ -1,20 +1,34 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
+import { AuthService } from '../../features/auth/services/authService';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = localStorage.getItem('tk_id_token');
 
-  if (!token) {
-    console.warn('[AuthInterceptor] Aucun token trouvé');
-    return next(req);
+  const authService = inject(AuthService);
+
+  const token = authService.getToken();
+
+  let authReq = req;
+
+  if (token) {
+    authReq = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
 
-  console.log('[AuthInterceptor] Token ajouté à la requête :', req.url);
+  return next(authReq).pipe(
 
-  const authReq = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+    catchError(error => {
 
-  return next(authReq);
+      if (error.status === 401) {
+        authService.logout();
+      }
+
+      return throwError(() => error);
+    })
+
+  );
 };

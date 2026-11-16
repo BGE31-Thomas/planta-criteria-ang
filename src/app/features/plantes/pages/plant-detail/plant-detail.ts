@@ -138,7 +138,7 @@ export class PlantDetailComponent implements OnInit {
 
   fermerFormulaireCritere(): void {
     this.formulaireCritereOuvert.set(false);
-    
+    this.criteria.set(new Critere());
   }
 
   ngOnInit(): void {

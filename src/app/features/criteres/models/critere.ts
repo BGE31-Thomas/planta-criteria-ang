@@ -1,5 +1,4 @@
 import { toSlug } from "../../../utils/SlugUtils";
-import { IImage } from "../../images/models/IImage";
 import { Imago } from "../../images/models/Image";
 import { PlantSearch } from "../../plantes/models/PlantSearch";
 import { Source } from "../../sources/models/Source";
