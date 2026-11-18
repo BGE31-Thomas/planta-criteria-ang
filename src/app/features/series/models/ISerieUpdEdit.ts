@@ -2,8 +2,8 @@ export interface ISerieUpdEdit {
 
     id: number;
     intitule: string;
-    lieu: string;
-    date: Date;
-    user_id: number;
+    lieu: string | null;
+    date: Date | null;
+    user_email: string;
     slug: string;
 }

@@ -38,6 +38,7 @@ import { Labels } from '../../../../utils/Labels';
 import { MatDialog } from '@angular/material/dialog';
 import { CritereGalerieComponent, CritereGalerieData } from '../../../../shared/dialogs/critere-galerie/critere-galerie';
 import { CritereUpdEdit } from '../../../criteres/models/critereUpdEdit';
+import { CollectionCreate, CollectionCreateData } from '../../../../shared/dialogs/collection-create/collection-create';
 
 @Component({
   selector: 'app-plant-detail',
@@ -64,7 +65,7 @@ export class PlantDetailComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly critereService = inject(CritereService);
 
-  readonly plant = signal<Plant | null>(null);
+  readonly plant = signal<Plant>(new Plant());
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
   readonly criteria = signal<Critere>(new Critere);
@@ -112,21 +113,21 @@ export class PlantDetailComponent implements OnInit {
 
     ouvrirGalerie(critere: Critere): void {
 
-    this.dialog.open<
-      CritereGalerieComponent,
-      CritereGalerieData
-    >(CritereGalerieComponent, {
+      this.dialog.open<
+        CritereGalerieComponent,
+        CritereGalerieData
+        >(CritereGalerieComponent, {
 
-      width: '900px',
-      maxWidth: '95vw',
-      maxHeight: '90vh',
+          width: '900px',
+          maxWidth: '95vw',
+          maxHeight: '90vh',
 
-      data: {
-        critereId: critere.id,
-        organe: critere.organe
-      }
+          data: {
+            critereId: critere.id,
+            organe: critere.organe
+          }
 
-    });
+      });
 
   }
 
@@ -159,7 +160,7 @@ export class PlantDetailComponent implements OnInit {
       tap(() => {
         this.loading.set(true);
         this.error.set(null);
-        this.plant.set(null);
+        this.plant.set(new Plant());
         this.criteres.set([]);
       }),
 
@@ -219,7 +220,7 @@ export class PlantDetailComponent implements OnInit {
           this.error.set('Cette plante est introuvable.');
         }
 
-        this.plant.set(null);
+        this.plant.set(new Plant());
         this.criteres.set([]);
         this.loading.set(false);
         return;
@@ -584,6 +585,22 @@ export class PlantDetailComponent implements OnInit {
         this.formulaireCritereOuvert.set(false);
       }
     });
+  }
+
+  addToNewCollection(plante: Plant): void {
+          this.dialog.open<
+        CollectionCreate,
+        CollectionCreateData
+        >(CollectionCreate, {
+
+          width: '900px',
+          maxWidth: '95vw',
+          maxHeight: '90vh',
+          data:{
+            plantId: plante.id
+          }
+
+      });
   }
   
 }

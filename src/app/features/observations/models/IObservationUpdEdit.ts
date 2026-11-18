@@ -1,7 +1,7 @@
 export interface IObservationUpdEdit {
     id: number;
-    serie_id: number;
-    plante_id: number;
+    serieId: number;
+    planteId: number;
     slug: string;
-    
+   
 }

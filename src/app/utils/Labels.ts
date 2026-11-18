@@ -34,4 +34,13 @@ export class Labels {
     organe: string = "Organe";
     description: string = "Description"
     action: string = "Action";
+    addToNewCollection: string = "Ajouter à une nouvelle collection";
+    libelle: string = "Libellé";
+    date: string = "Date";
+    commune: string = "Commune";
+    createCollection: string = "Créer la collection";
+    collectionCreated: string = "Collection créée avec succès !";
+    libelleMissing: string = "Le libellé est obligatoire.";
+    dateMissing: string = "La date est obligatoire.";
+    communeMissing: string = "La commune est obligatoire.";
 }

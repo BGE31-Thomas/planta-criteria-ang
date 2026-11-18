@@ -1,19 +1,18 @@
-import { ICritereUpdEdit } from "../../criteres/interfaces/ICritereUpdEdit";
 import { IObservationUpdEdit } from "./IObservationUpdEdit";
 
 export class ObservationUpdEdit implements IObservationUpdEdit {
  
     id: number = 0;
-    serie_id: number = 0;
-    plante_id: number = 0;
+    serieId: number = 0;
+    planteId: number = 0;
     slug: string = '';
-
+   
     copy(): ObservationUpdEdit {
         const copy = new ObservationUpdEdit();
 
         copy.id = this.id;
-        copy.serie_id = this.serie_id;
-        copy.plante_id = this.plante_id;
+        copy.serieId = this.serieId;
+        copy.planteId = this.planteId;
         copy.slug = this.slug;
 
         return copy;
@@ -23,10 +22,9 @@ export class ObservationUpdEdit implements IObservationUpdEdit {
         const observationUpdEdit = new ObservationUpdEdit();
 
         observationUpdEdit.id = data.id;
-        observationUpdEdit.serie_id = data.serie_id;
-        observationUpdEdit.plante_id = data.plante_id;
+        observationUpdEdit.serieId = data.serieId;
+        observationUpdEdit.planteId = data.planteId;
         observationUpdEdit.slug = data.slug;
-        
 
         return observationUpdEdit;
     }

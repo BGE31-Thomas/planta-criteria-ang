@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, computed } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -84,18 +84,13 @@ export class AuthService {
       return false;
     }
 
-    try {
-      const payload = JSON.parse(
-        atob(token.split('.')[1])
-      );
+    const expiration = this.getTokenExpiration();
 
-      const expiration = payload.exp * 1000;
-
-      return Date.now() < expiration;
-
-    } catch {
+    if (!expiration) {
       return false;
     }
+
+    return Date.now() < expiration;
   }
 
   getTokenExpiration(): number | null {

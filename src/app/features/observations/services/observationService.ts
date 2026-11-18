@@ -11,7 +11,6 @@ import { SerieUpdEdit } from '../../series/models/SerieUpdEdit';
 export class ObservationService {
     private GET_ALL_URL = environment.java_server+'/api/observations';
     private http = inject(HttpClient);
-    private token = localStorage.getItem('tk_id_token');
 
     getAllBySerie(serie: SerieUpdEdit): Observable<ObservationUpdEdit[]> {
         return this.http.post<IObservationUpdEdit[]>(this.GET_ALL_URL,serie,{}).pipe(

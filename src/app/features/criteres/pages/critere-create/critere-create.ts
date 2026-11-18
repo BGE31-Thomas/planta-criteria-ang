@@ -206,6 +206,7 @@ export class CritereCreate implements OnInit, OnDestroy {
       )
     );
   }
+  
   supprimerImage(fichier: File): void {
     const apercu = this.apercusImages().find(
       image => image.fichier === fichier

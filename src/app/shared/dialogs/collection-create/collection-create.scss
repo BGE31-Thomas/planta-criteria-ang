@@ -1,0 +1,18 @@
+.galerie-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+    min-width: 300px;
+    margin-top: 0;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+h2 {
+    font-size: 1.4rem;
+}
+
+mat-form-field {
+    display: block;
+    width: 50%;
+}

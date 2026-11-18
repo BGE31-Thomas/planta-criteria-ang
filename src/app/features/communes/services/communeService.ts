@@ -1,25 +1,32 @@
-import { Observable, map, shareReplay } from 'rxjs';
-import { inject, Service } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
-import { ICommuneSearch } from '../interfaces/ICommuneSearch';
-import { CommuneSearch } from '../models/CommuneSearch';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-@Service()
+export interface Commune {
+  nom: string;
+  code: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class CommuneService {
 
-  private GET_ALL_URL = environment.java_server+'/api/communes?q=';
   private http = inject(HttpClient);
-  private token = localStorage.getItem('tk_id_token');
 
-  getAllBySItes(commune:string): Observable<CommuneSearch[]> {
-    return this.http.post<ICommuneSearch[]>(this.GET_ALL_URL+commune,{}).pipe(
-      shareReplay(1),
-      map(communeJsonArray => {
-        return communeJsonArray.map<CommuneSearch>(
-          communeJson => CommuneSearch.fromJson(communeJson)
-        )
-      })
+  private readonly API_URL = 'https://geo.api.gouv.fr/communes';
+
+  rechercher(nom: string): Observable<Commune[]> {
+
+    const params = new HttpParams()
+      .set('nom', nom)
+      .set('fields', 'nom,code')
+      .set('boost', 'population')
+      .set('limit', '20');
+
+    return this.http.get<Commune[]>(
+      this.API_URL,
+      { params }
     );
   }
 }

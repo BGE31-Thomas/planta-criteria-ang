@@ -1,0 +1,102 @@
+<div class="galerie-container">
+     <button
+      mat-icon-button
+      type="button"
+      (click)="fermerDialog()"
+      aria-label="Fermer la galerie"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  <!-- En-tête -->
+  <div class="galerie-header">
+
+    <div>
+      <h2>Créer une nouvelle collection</h2>
+    <form
+        [formGroup]="formulaire"
+        (ngSubmit)="enregistrerCollection()"
+    >
+
+  
+        <mat-form-field appearance="outline">
+            <mat-label>{{ labels.libelle }}</mat-label>
+
+            <input
+            matInput
+            formControlName="libelle"
+            placeholder="Bois de Meudon"
+            />
+
+            @if (formulaire.controls.libelle.hasError('required')
+            && formulaire.controls.libelle.touched) {
+            <mat-error>{{ labels.libelleMissing }}</mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Date -->
+        <mat-form-field appearance="outline">
+            <mat-label>{{ labels.date }}</mat-label>
+
+            <input
+            matInput
+            [matDatepicker]="picker"
+            [max]="dateMax"
+            formControlName="date"
+            placeholder="JJ/MM/AAAA"
+            />
+
+            <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+            />
+
+            <mat-datepicker #picker />
+
+            @if (formulaire.controls.date.hasError('required')
+            && formulaire.controls.date.touched) {
+            <mat-error>{{ labels.dateMissing }}</mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Commune -->
+        <mat-form-field appearance="outline">
+            <mat-label>{{ labels.commune }}</mat-label>
+
+            <input
+            matInput
+            formControlName="commune"
+            [matAutocomplete]="autoCommune"
+            placeholder="Rechercher une commune..."
+            />
+
+            <mat-autocomplete
+            #autoCommune="matAutocomplete"
+            [displayWith]="afficherCommune"
+            >
+            @for (commune of communes(); track commune.code) {
+                <mat-option [value]="commune">
+                {{ commune.nom }}
+                <span class="code-commune">({{ commune.code }})</span>
+                </mat-option>
+            }
+            </mat-autocomplete>
+
+            @if (formulaire.controls.commune.hasError('required')
+            && formulaire.controls.commune.touched) {
+            <mat-error>{{ labels.communeMissing }}</mat-error>
+            }
+        </mat-form-field>
+
+        <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="formulaire.invalid"
+        >{{labels.createCollection}}</button>
+
+    </form>
+   
+
+</div>
+
+
