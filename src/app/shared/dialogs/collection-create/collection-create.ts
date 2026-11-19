@@ -18,6 +18,7 @@ import { SerieUpdEdit } from '../../../features/series/models/SerieUpdEdit';
 import { SerieService } from '../../../features/series/services/SerieService';
 import { ObservationService } from '../../../features/observations/services/observationService';
 import { ObservationUpdEdit } from '../../../features/observations/models/ObservationUpdEdit';
+import { SerieObs } from '../../../features/series/models/SerieObs';
 
 
 
@@ -63,7 +64,7 @@ export class CollectionCreate implements OnInit {
 
   private readonly fb = inject(FormBuilder);
 
-  collection = new SerieUpdEdit();
+  collection = new SerieObs();
 
   readonly formulaire = this.fb.group({
     libelle: ['', Validators.required],
@@ -116,7 +117,7 @@ export class CollectionCreate implements OnInit {
     if (typeof valeur.commune === 'object' && valeur.commune !== null) {
       this.collection.lieu = valeur.commune?.nom;
     }
-
+    this.collection.planteId = this.data.plantId;
     console.log('Collection à enregistrer :', this.collection);
     if (!this.collection.intitule || !this.collection.date || !this.collection.lieu) {
       this.formulaire.markAllAsTouched();
@@ -125,19 +126,13 @@ export class CollectionCreate implements OnInit {
 
     if (this.collection.id === 0) {
       // Création
-      this.serieService.add(this.collection)
+      this.serieService.addWithObservation(this.collection)
         .subscribe((resp) => {
-            console.log('Collection créée avec succès :', resp);
-            let observation = new ObservationUpdEdit();
-            observation.serieId = resp.id;
-            observation.planteId = this.data.plantId;
-            console.log('Observation à créer :', observation);
-            this.observationService.add(observation).subscribe((obsResp) => {
-                console.log('Observation créée avec succès :', obsResp);
-                this.fermerDialog();
-            });
-          }
-        );
+           
+          this.dialogRef.close(resp);
+           
+          
+      });
     }
   }
 

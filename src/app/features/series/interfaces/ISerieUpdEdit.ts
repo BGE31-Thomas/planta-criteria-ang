@@ -4,6 +4,5 @@ export interface ISerieUpdEdit {
     intitule: string;
     lieu: string | null;
     date: Date | null;
-    user_email: string;
     slug: string;
 }

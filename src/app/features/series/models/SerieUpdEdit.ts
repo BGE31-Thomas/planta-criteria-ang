@@ -1,5 +1,5 @@
 import { toSlug } from "../../../utils/SlugUtils";
-import { ISerieUpdEdit } from "./ISerieUpdEdit";
+import { ISerieUpdEdit } from "../interfaces/ISerieUpdEdit";
 
 
 export class SerieUpdEdit implements ISerieUpdEdit {
@@ -7,7 +7,6 @@ export class SerieUpdEdit implements ISerieUpdEdit {
     intitule: string = '';
     lieu: string | null = null;
     date: Date | null = null;
-    user_email: string = '';
     slug: string = '';
     
     copy(): SerieUpdEdit {
@@ -17,7 +16,6 @@ export class SerieUpdEdit implements ISerieUpdEdit {
         copy.intitule = this.intitule;
         copy.lieu = this.lieu;
         copy.date = this.date ? new Date(this.date.getTime()) : new Date();
-        copy.user_email = this.user_email;
         copy.slug = toSlug(this.intitule);
 
         return copy;
@@ -30,7 +28,6 @@ export class SerieUpdEdit implements ISerieUpdEdit {
         serie.intitule = data.intitule;
         serie.lieu = data.lieu;
         serie.date = data.date ? new Date(data.date) : new Date();
-        serie.user_email = data.user_email;
         serie.slug = toSlug(data.intitule);
 
         return serie;

@@ -4,7 +4,9 @@ import { Observable, shareReplay, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { User } from '../../auth/models/user';
 import { SerieUpdEdit} from '../models/SerieUpdEdit';
-import { ISerieUpdEdit } from '../models/ISerieUpdEdit';
+import { ISerieUpdEdit } from '../interfaces/ISerieUpdEdit';
+import { SerieObs } from '../models/SerieObs';
+import { ISerieObs } from '../interfaces/ISerieObs';
 
 @Service()
 export class SerieService {
@@ -39,6 +41,14 @@ export class SerieService {
             
         }).pipe(
             map(serieJson => SerieUpdEdit.fromJson(serieJson))
+        );
+    }
+
+    addWithObservation(serie: SerieObs): Observable<SerieObs> {
+        return this.http.post<ISerieObs>(this.GET_ALL_URL + '/observation', serie.toJson(),{
+            
+        }).pipe(
+            map(serieJson => SerieObs.fromJson(serieJson))
         );
     }
 
