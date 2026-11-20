@@ -43,4 +43,6 @@ export class Labels {
     libelleMissing: string = "Le libellé est obligatoire.";
     dateMissing: string = "La date est obligatoire.";
     communeMissing: string = "La commune est obligatoire.";
+    addToExistingCollection: string = "Ajouter à une collection existante";
+    add: string = "Ajouter";
 }

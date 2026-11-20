@@ -1,0 +1,33 @@
+.loading {
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+}
+
+.error {
+    color: #d32f2f;
+    margin: 12px 0;
+}
+
+.serie-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.serie-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.serie-details {
+    font-size: 13px;
+    color: #777;
+}
+
+mat-list-item {
+    margin-bottom: 8px;
+}

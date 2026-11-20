@@ -84,6 +84,15 @@
         <mat-icon>add</mat-icon>
         {{labels.addToNewCollection}}
       </button>
+
+      <button
+        mat-flat-button
+        type="button"
+        (click)="addToExistingCollection(plant())"
+      >
+        <mat-icon>add</mat-icon>
+        {{labels.addToExistingCollection}}
+      </button>
        
       <h2>
         <mat-icon>info</mat-icon>

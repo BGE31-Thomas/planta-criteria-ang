@@ -91,8 +91,11 @@
             mat-raised-button
             color="primary"
             type="submit"
-            [disabled]="formulaire.invalid"
-        >{{labels.createCollection}}</button>
+            [disabled]="formulaire.invalid || enregistrement()"
+        ><mat-icon>{{ enregistrement() ? 'hourglass_empty' : 'save' }}</mat-icon>
+          <span>
+            {{ enregistrement() ? labels.recordingProgress : labels.createCollection }}
+          </span></button>
 
     </form>
    

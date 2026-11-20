@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>
+    Ajouter à une collection existante
+</h2>
+
+<mat-dialog-content>
+
+    @if (chargement()) {
+
+        <div class="loading">
+            <mat-spinner diameter="35"></mat-spinner>
+        </div>
+
+    } @else {
+
+        @if (erreur()) {
+            <p class="error">{{ erreur() }}</p>
+        }
+
+        @if (series().length === 0) {
+
+            <p>
+                Vous n'avez pas encore créé de collection.
+            </p>
+
+        } @else {
+
+            <mat-list>
+
+                @for (serie of series(); track serie.id) {
+
+                    <mat-list-item>
+
+                        <div class="serie-item">
+
+                            <div class="serie-info">
+                                <strong>{{ serie.intitule }}</strong>
+
+                                <div class="serie-details">
+                                    {{ serie.lieu }}
+                                </div>
+                            </div>
+
+                            <button
+                                mat-flat-button
+                                color="primary"
+                                [disabled]="ajoutEnCours() !== null"
+                                (click)="ajouter(serie)"
+                            >
+
+                                <mat-icon>{{ ajoutEnCours() === serie.id ? 'hourglass_empty' : 'save' }}</mat-icon>
+                                <span>
+                                    {{ ajoutEnCours() === serie.id ? labels.recordingProgress : labels.add }}
+                                </span>
+                            </button>
+
+                        </div>
+
+                    </mat-list-item>
+
+                }
+
+            </mat-list>
+
+        }
+
+    }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+
+    <button mat-button (click)="fermer()">
+        Fermer
+    </button>
+
+</mat-dialog-actions>

@@ -7,17 +7,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { inject, signal, OnInit } from '@angular/core';
-import { debounceTime, distinctUntilChanged, filter, switchMap, catchError } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, switchMap, catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { CommuneService, Commune } from '../../../features/communes/services/communeService';
 import { Labels } from '../../../utils/Labels';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { SerieUpdEdit } from '../../../features/series/models/SerieUpdEdit';
 import { SerieService } from '../../../features/series/services/SerieService';
 import { ObservationService } from '../../../features/observations/services/observationService';
-import { ObservationUpdEdit } from '../../../features/observations/models/ObservationUpdEdit';
 import { SerieObs } from '../../../features/series/models/SerieObs';
 
 
@@ -56,6 +54,8 @@ export class CollectionCreate implements OnInit {
 
   private readonly dialogRef = inject(MatDialogRef<CollectionCreate>);
 
+  readonly enregistrement = signal(false);
+
   // Date maximale autorisée
   dateMax = new Date();
 
@@ -83,7 +83,7 @@ export class CollectionCreate implements OnInit {
 
     this.formulaire.controls.commune.valueChanges.pipe(
 
-      debounceTime(300),
+      debounceTime(3),
 
       filter((value): value is string =>
         typeof value === 'string' && value.length >= 2
@@ -124,9 +124,14 @@ export class CollectionCreate implements OnInit {
       return;
     }
 
+    this.enregistrement.set(true);
+
     if (this.collection.id === 0) {
       // Création
       this.serieService.addWithObservation(this.collection)
+        .pipe(
+          finalize(() => this.enregistrement.set(false))
+        )
         .subscribe((resp) => {
            
           this.dialogRef.close(resp);

@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable, shareReplay, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { User } from '../../auth/models/user';
 import { SerieUpdEdit} from '../models/SerieUpdEdit';
 import { ISerieUpdEdit } from '../interfaces/ISerieUpdEdit';
 import { SerieObs } from '../models/SerieObs';
@@ -12,18 +11,17 @@ import { ISerieObs } from '../interfaces/ISerieObs';
 export class SerieService {
     private GET_ALL_URL = environment.java_server+'/api/series';
     private http = inject(HttpClient);
-    private token = localStorage.getItem('tk_id_token');
 
-    getAllbyUser(user: User): Observable<ISerieUpdEdit[]> {
-        return this.http.post<ISerieUpdEdit[]>(this.GET_ALL_URL,user,{
-            
-        }).pipe(
-            shareReplay(1),
-            map(seriesJsonArray => {
-            return seriesJsonArray.map<SerieUpdEdit>(
-                serieJson => SerieUpdEdit.fromJson(serieJson)
+    getAllByUser(): Observable<SerieUpdEdit[]> {
+
+        return this.http.get<ISerieUpdEdit[]>(
+            `${this.GET_ALL_URL}/user`
+        ).pipe(
+            map(seriesJsonArray =>
+                seriesJsonArray.map<SerieUpdEdit>(
+                    serieJson => SerieUpdEdit.fromJson(serieJson)
+                )
             )
-            })
         );
     }
     

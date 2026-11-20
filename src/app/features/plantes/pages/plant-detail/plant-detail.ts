@@ -37,8 +37,8 @@ import { CritereCreate } from '../../../criteres/pages/critere-create/critere-cr
 import { Labels } from '../../../../utils/Labels';
 import { MatDialog } from '@angular/material/dialog';
 import { CritereGalerieComponent, CritereGalerieData } from '../../../../shared/dialogs/critere-galerie/critere-galerie';
-import { CritereUpdEdit } from '../../../criteres/models/critereUpdEdit';
 import { CollectionCreate, CollectionCreateData } from '../../../../shared/dialogs/collection-create/collection-create';
+import { ExistingCollectionDialog, ExistingCollectionDialogData } from '../../../../shared/dialogs/collection-existing/existing-collection';
 
 @Component({
   selector: 'app-plant-detail',
@@ -598,6 +598,22 @@ export class PlantDetailComponent implements OnInit {
           maxHeight: '90vh',
           data:{
             plantId: plante.id
+          }
+
+      });
+  }
+
+  addToExistingCollection(plante: Plant): void {
+          this.dialog.open<
+        ExistingCollectionDialog,
+        ExistingCollectionDialogData
+        >(ExistingCollectionDialog, {
+
+          width: '900px',
+          maxWidth: '95vw',
+          maxHeight: '90vh',
+          data:{
+            planteId: plante.id
           }
 
       });
