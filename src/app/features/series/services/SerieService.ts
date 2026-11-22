@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Service } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, shareReplay, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { SerieUpdEdit} from '../models/SerieUpdEdit';
 import { ISerieUpdEdit } from '../interfaces/ISerieUpdEdit';
 import { SerieObs } from '../models/SerieObs';
 import { ISerieObs } from '../interfaces/ISerieObs';
+import { SerieDetail } from '../models/SerieDetail';
+import { ISerieDetail } from '../interfaces/ISerieDetail';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class SerieService {
     private GET_ALL_URL = environment.java_server+'/api/series';
     private http = inject(HttpClient);
@@ -59,4 +61,15 @@ export class SerieService {
             map(serieJson => SerieUpdEdit.fromJson(serieJson))
         );
     }
+
+    // Détail complet d'une série
+    getDetail(id: number, slug: string): Observable<SerieDetail> {
+
+        return this.http.get<ISerieDetail>(
+        `${this.GET_ALL_URL}/${id}/${slug}`
+        ).pipe(
+            map(serieJson => SerieDetail.fromJson(serieJson))
+        );
+    }
+
 }

@@ -45,4 +45,5 @@ export class Labels {
     communeMissing: string = "La commune est obligatoire.";
     addToExistingCollection: string = "Ajouter à une collection existante";
     add: string = "Ajouter";
+    look: string = "Voir";
 }

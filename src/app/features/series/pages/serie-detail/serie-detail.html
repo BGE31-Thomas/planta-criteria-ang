@@ -1,1 +1,107 @@
-<p>serie-detail works!</p>
+@if (chargement()) {
+
+  <div class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+} @else if (erreur() && !serie()) {
+
+  <p class="error">{{ erreur() }}</p>
+
+} @else if (serie(); as serie) {
+
+  <div class="serie-header">
+
+    <h1>{{ serie.intitule }}</h1>
+
+    <p>
+      <mat-icon>place</mat-icon>
+      {{ serie.lieu }}
+    </p>
+
+    <p>
+      <mat-icon>calendar_today</mat-icon>
+      {{ serie.date | date:'dd/MM/yyyy' }}
+    </p>
+
+  </div>
+
+  <h2>Plantes observées</h2>
+
+  <mat-accordion multi>
+
+    @for (observation of serie.observations; track observation.id) {
+
+      <mat-expansion-panel>
+
+        <mat-expansion-panel-header>
+
+          <mat-panel-title [innerHTML]="observation.plante.nomCompletHtml">
+          </mat-panel-title>
+
+          <mat-panel-description>
+            {{ observation.observationsCritere.length }} critères
+          </mat-panel-description>
+
+        </mat-expansion-panel-header>
+
+        <div class="criteres">
+
+          @for (
+            item of observation.observationsCritere;
+            track item.id
+          ) {
+
+            <div class="critere-row">
+
+              <div class="critere-description">
+
+                <strong>
+                  {{ item.critere.organe }}
+                </strong>
+
+                <p>
+                  {{ item.critere.description }}
+                </p>
+
+              </div>
+
+              <mat-form-field appearance="outline">
+
+                <mat-label>Statut</mat-label>
+
+                <mat-select
+                  [value]="item.statut.id"
+                  [disabled]="enregistrement().includes(item.id)"
+                  (selectionChange)="changerStatut(item, $event.value)"
+                >
+
+                  @for (statut of statuts(); track statut.id) {
+
+                    <mat-option [value]="statut.id">
+                      {{ statut.libelle }}
+                    </mat-option>
+
+                  }
+
+                </mat-select>
+
+              </mat-form-field>
+
+              @if (enregistrement().includes(item.id)) {
+                <mat-spinner diameter="20"></mat-spinner>
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+      </mat-expansion-panel>
+
+    }
+
+  </mat-accordion>
+
+}

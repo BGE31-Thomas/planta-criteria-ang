@@ -1,4 +1,4 @@
-import { IObservationUpdEdit } from "./IObservationUpdEdit";
+import { IObservationUpdEdit } from "../interfaces/IObservationUpdEdit";
 
 export class ObservationUpdEdit implements IObservationUpdEdit {
  

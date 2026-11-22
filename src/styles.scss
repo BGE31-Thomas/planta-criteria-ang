@@ -5,18 +5,37 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+$primary-palette: (
+  0: #000000,
+  10: #00201b,
+  20: #00382f,
+  25: #004438,
+  30: #005044,
+  35: #005c4f,
+  40: #00674f,
+  50: #008577,
+  60: #009688,
+  70: #4db6ac,
+  80: #80cbc4,
+  90: #b2dfdb,
+  95: #d9f2ef,
+  98: #f0faf8,
+  99: #f7fdfb,
+  100: #ffffff,
+  secondary: #00674F,
+);
+
 html {
   height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
+
+  @include mat.theme((
+    color: (
+      primary: $primary-palette,
+      tertiary: $primary-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
 }
 
 body {

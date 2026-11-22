@@ -1,1 +1,11 @@
-<p>serie-list works!</p>
+@for (serie of series(); track serie.id) {
+    <h3>{{serie.intitule}}</h3>
+    <button
+        mat-flat-button
+        type="button"
+        (click)="moveToCollection(serie)"
+      >
+        <mat-icon>edit</mat-icon>
+        {{labels.look}}
+      </button>
+}

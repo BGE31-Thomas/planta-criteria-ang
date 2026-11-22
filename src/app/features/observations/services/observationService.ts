@@ -3,7 +3,7 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, shareReplay, map } from 'rxjs';
 import { ObservationUpdEdit } from '../models/ObservationUpdEdit';
-import { IObservationUpdEdit } from '../models/IObservationUpdEdit';
+import { IObservationUpdEdit } from '../interfaces/IObservationUpdEdit';
 import { SerieUpdEdit } from '../../series/models/SerieUpdEdit';
 
 
